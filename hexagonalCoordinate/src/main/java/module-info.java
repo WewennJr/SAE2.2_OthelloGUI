@@ -1,0 +1,3 @@
+module HexagonalCoordinate {
+    exports coordinates;
+}
