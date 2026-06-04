@@ -81,9 +81,10 @@ public class IAController extends AppControllerBase implements Initializable {
 
     public void updateEvaluationBar(IState state) {
         double score = miniMax.evaluate(state, Team.BLACK);
-        double ratio = (score + 100_000.0) / 200_000.0;
+        double ratio = (score + 5_000.0) / 10_000.0;
         ratio = Math.max(0.0, Math.min(1.0, ratio));
         evaluationBar.setProgress(ratio);
+        System.out.println("ProgressBar : " + ratio);
     }
 
     @FXML
