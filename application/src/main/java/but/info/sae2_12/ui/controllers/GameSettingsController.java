@@ -1,4 +1,5 @@
 package but.info.sae2_12.ui.controllers;
+import but.info.sae2_12.model.factory.FactoryCube;
 import but.info.sae2_12.model.factory.FactoryDoubled;
 import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.objects.HexSquare;
@@ -30,7 +31,8 @@ public class GameSettingsController extends AppControllerBase {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        formatChoice.getItems().addAll("2D", "Cubique");
+        formatChoice.getSelectionModel().select(0);
         sousZone.setVisible(false);
         sousZone.setManaged(false);
         sousZone.setDisable(true);
@@ -41,26 +43,24 @@ public class GameSettingsController extends AppControllerBase {
             sousZone.setDisable(!newVal);
         });
 
-        coordonnees.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            getController().hexSquares.values().forEach(
-                    hex ->hex.setVisibleAndChilds(newVal)
-            );
-        });
-
         nouveau.setOnAction(event -> {
             getController().state.set(new FactoryDoubled().randomGame());
+            getController().state.set(new FactoryCube().randomGame());
         });
 
         testNoir.setOnAction(event -> {
             getController().state.set(new FactoryDoubled().stateForBlackLineTest());
+            getController().state.set(new FactoryCube().stateForBlackLineTest());
         });
 
         testBlanc.setOnAction(event -> {
             getController().state.set(new FactoryDoubled().stateForWhiteLineTest());
+            getController().state.set(new FactoryCube().stateForWhiteLineTest());
         });
 
         testDouble.setOnAction(event -> {
             getController().state.set(new FactoryDoubled().doubleLineStateTest());
+            getController().state.set(new FactoryCube().doubleLineStateTest());
         });
     }
 
@@ -73,5 +73,19 @@ public class GameSettingsController extends AppControllerBase {
         AppController.couleur1.addListener((obs, oldVal, newVal) -> getController().gameController.initMap());
         AppController.couleur2.addListener((obs, oldVal, newVal) -> getController().gameController.initMap());
         AppController.couleur3.addListener((obs, oldVal, newVal) -> getController().gameController.initMap());
+
+        coordonnees.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            getController().hexSquares.values().forEach(
+                    hex -> hex.label.setVisible(newVal)
+            );
+        });
+
+        getController().hexSquares.values().forEach(hex -> hex.label.setVisible(false));
+
+        formatChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null){
+                getController().gameController.setCoordMode((String) newVal);
+            }
+        });
     }
 }

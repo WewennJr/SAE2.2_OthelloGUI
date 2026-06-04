@@ -23,7 +23,7 @@ public class HexSquare extends Polygon {
     public Coordinate coordinate;
     Circle shape;
     Circle visualIndicator;
-    Label label;
+    public Label label;
 
     public HexSquare(AppController appController, Coordinate coordinate, Color color) {
         this.coordinate = coordinate;
