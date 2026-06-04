@@ -95,6 +95,15 @@ public class GameController extends AppControllerBase {
                 lastMouseY = event.getSceneY();
             }
         });
+
+        this.pane.setOnScroll(event -> {
+            double zoomFactor = 1.05;
+            if (event.getDeltaY() < 0) {
+                zoomFactor = 0.95;
+            }
+            pane.setScaleX(pane.getScaleX() * zoomFactor);
+            pane.setScaleY(pane.getScaleY() * zoomFactor);
+        });
     }
 
     public void setCoordMode(String mode) {
