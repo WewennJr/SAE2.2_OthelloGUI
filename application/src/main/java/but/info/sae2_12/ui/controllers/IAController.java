@@ -2,6 +2,7 @@ package but.info.sae2_12.ui.controllers;
 
 import but.info.sae2_12.AI.MiniMax;
 import but.info.sae2_12.AI.MinimaxAI;
+import but.info.sae2_12.model.GameMode;
 import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.actions.Action;
 import but.info.sae2_12.model.actions.Move;
@@ -12,6 +13,9 @@ import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.interaction.PlayMode;
 import coordinates.Coordinate;
 import javafx.application.Platform;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+import but.info.sae2_12.App;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -114,29 +118,66 @@ public class IAController extends AppControllerBase implements Initializable {
         ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("Annuler");
 
         alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                if (bestMove instanceof Move move) {
-                    ((SimpleObjectProperty<IState>) getController().state).set(state.move(move));
-                } else if (bestMove instanceof RemoveLine removeLine) {
-                    ((SimpleObjectProperty<IState>) getController().state).set(state.removeLine(removeLine));
+                if (response == ButtonType.OK) {
+                    if (bestMove instanceof Move move) {
+                        getController().setState(state.move(move));
+                    } else if (bestMove instanceof RemoveLine removeLine) {
+                        getController().setState(state.removeLine(removeLine));
+                    }
+
+                    // Si on est en Player vs IA et que c'est maintenant au tour de l'IA,
+                    // lancer l'IA automatiquement (avec un court délai pour l'UI).
+                    if (App.getGameMode() == GameMode.PLAYER_VS_AI
+                            && getController().getState().turn() == Team.BLACK) {
+                        PauseTransition pause = new PauseTransition(Duration.millis(300));
+                        pause.setOnFinished(e -> playAI(getController()));
+                        pause.play();
+                    }
                 }
-            }
         });
     }
 
     public void playAI(AppController controller) {
         IState state = controller.state.getValue();
         MinimaxAI ai = new MinimaxAI(state.turn(), 3);
-        Action bestMove = ai.chooseMove(state);
 
-        if (bestMove == null) {
+        // Première décision (peut être un Move ou une RemoveLine si l'état l'exige)
+        Action bestMove = ai.chooseMove(state);
+        if (bestMove == null) return;
+
+        try {
+            if (bestMove instanceof Move move) {
+                // Appliquer le déplacement
+                ((SimpleObjectProperty<IState>) controller.state).set(state.move(move));
+                state = controller.state.getValue();
+            } else if (bestMove instanceof RemoveLine removeLine) {
+                // Appliquer directement une suppression de ligne (rare ici)
+                ((SimpleObjectProperty<IState>) controller.state).set(state.removeLine(removeLine));
+                state = controller.state.getValue();
+            }
+        } catch (Exception e) {
+            // En cas d'erreur, on abandonne l'action de l'IA
+            e.printStackTrace();
             return;
         }
 
-        if (bestMove instanceof Move move) {
-            ((SimpleObjectProperty<IState>) controller.state).set(state.move(move));
-        } else if (bestMove instanceof RemoveLine removeLine) {
-            ((SimpleObjectProperty<IState>) controller.state).set(state.removeLine(removeLine));
+        // Si après le mouvement l'IA a créé(s) des ligne(s), elle doit les supprimer tant qu'il y en a
+        while (!state.getLines().isEmpty() && state.turn() == ai.getAiTeam()) {
+            Action removal = ai.chooseMove(state); // chooseMove traitera la suppression si getLines() non vide
+            if (removal == null) break;
+
+            if (removal instanceof RemoveLine rl) {
+                try {
+                    ((SimpleObjectProperty<IState>) controller.state).set(state.removeLine(rl));
+                    state = controller.state.getValue();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    break;
+                }
+            } else {
+                // Si l'IA renvoie autre chose (par sécurité), on arrête la boucle
+                break;
+            }
         }
     }
 }

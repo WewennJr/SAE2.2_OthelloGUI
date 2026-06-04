@@ -56,14 +56,13 @@ public class PlayMode extends InteractionMode {
                     square.appControllerInstance.setCurrentMode(new RemoveLineMode());
                 }
 
-                if (square.appControllerInstance.getGameMode() == GameMode.PLAYER_VS_AI) {
+                // Si on est en Player vs IA et que c'est bien au tour de l'IA après le coup,
+                // lancer l'IA. Sinon (par ex. lignes à supprimer par le joueur), ne rien faire.
+                if (square.appControllerInstance.getGameMode() == GameMode.PLAYER_VS_AI
+                        && square.appControllerInstance.getState().turn() == but.info.sae2_12.model.Team.BLACK) {
 
                     PauseTransition pause = new PauseTransition(Duration.millis(300));
-
-                    pause.setOnFinished(e -> {
-                        square.appControllerInstance.iaController.playAI(square.appControllerInstance);
-                    });
-
+                    pause.setOnFinished(e -> square.appControllerInstance.iaController.playAI(square.appControllerInstance));
                     pause.play();
                 }
 

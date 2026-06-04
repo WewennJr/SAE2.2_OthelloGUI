@@ -4,6 +4,7 @@ import but.info.sae2_12.model.state.IState;
 import but.info.sae2_12.model.state.State;
 import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.interaction.RemoveLineMode;
+import but.info.sae2_12.ui.interaction.PlayMode;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
 import javafx.fxml.FXML;
@@ -51,6 +52,9 @@ public class GameController extends AppControllerBase {
         ));
         if(!lines.isEmpty()) {
             this.getController().setCurrentMode(new RemoveLineMode());
+        } else {
+            // s'il n'y a plus de lignes, revenir au mode de jeu normal
+            this.getController().setCurrentMode(new PlayMode());
         }
 
 
