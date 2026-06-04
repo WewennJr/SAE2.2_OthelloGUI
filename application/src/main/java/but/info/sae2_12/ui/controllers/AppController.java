@@ -22,12 +22,10 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
-
-    public ObjectProperty<IState> state = new SimpleObjectProperty<>(new FactoryDoubled().stateForBlackLineTest());
-
     public ObjectProperty<InteractionMode> currentMode = new SimpleObjectProperty<>(new PlayMode());
 
     public HashMap<Coordinate, HexSquare> hexSquares = new HashMap<>();
+    public final SimpleObjectProperty<IState> state = new SimpleObjectProperty<>(new FactoryCube().stateForWhiteLineTest());
 
     public @FXML GameController gameController;
     public @FXML GameSettingsController gameSettingsController;
@@ -47,11 +45,14 @@ public class AppController implements Initializable {
         this.iaController.setController(this);
         this.gameStateController.setController(this);
 
-        ((SimpleObjectProperty<IState>) state).addListener((obs, oldState, newState) -> {
+        state.addListener((obs, oldState, newState) -> {
             if (newState != null) {
                 iaController.updateEvaluationBar(newState);
             }
         });
+
+        state.subscribe((state) -> gameStateController.refreshGameStateLabels(newState));
+        gameStateController.refreshGameStateLabels(state.getValue());
     }
 
     public ObjectProperty<Color> getCouleur1(){
