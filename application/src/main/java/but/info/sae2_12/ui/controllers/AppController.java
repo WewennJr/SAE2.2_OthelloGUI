@@ -25,7 +25,7 @@ public class AppController implements Initializable {
 
     public ObjectProperty<IState> state = new SimpleObjectProperty<>(new FactoryDoubled().stateForBlackLineTest());
 
-    public ObservableValue<InteractionMode> currentMode = new SimpleObjectProperty<>(new PlayMode());
+    public ObjectProperty<InteractionMode> currentMode = new SimpleObjectProperty<>(new PlayMode());
 
     public HashMap<Coordinate, HexSquare> hexSquares = new HashMap<>();
 
@@ -57,7 +57,6 @@ public class AppController implements Initializable {
     public ObjectProperty<Color> getCouleur3(){
         return couleur3;
     }
-}
 
     public InteractionMode getCurrentMode() {
         return currentMode.getValue();
@@ -65,5 +64,13 @@ public class AppController implements Initializable {
 
     public IState getState() {
         return state.getValue();
+    }
+
+    public void setState(IState newState) {
+        this.state.setValue(newState);
+    }
+
+    public void setCurrentMode(InteractionMode mode) {
+        this.currentMode.set(mode);
     }
 }
