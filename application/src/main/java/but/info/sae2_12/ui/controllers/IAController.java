@@ -7,7 +7,10 @@ import but.info.sae2_12.model.actions.Action;
 import but.info.sae2_12.model.actions.Move;
 import but.info.sae2_12.model.actions.RemoveLine;
 import but.info.sae2_12.model.state.IState;
+import but.info.sae2_12.model.tokens.Ring;
 import but.info.sae2_12.ui.AppControllerBase;
+import but.info.sae2_12.ui.interaction.PlayMode;
+import coordinates.Coordinate;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -16,6 +19,7 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class IAController extends AppControllerBase implements Initializable {
 
@@ -118,5 +122,21 @@ public class IAController extends AppControllerBase implements Initializable {
                 }
             }
         });
+    }
+
+    public void playAI(AppController controller) {
+        IState state = controller.state.getValue();
+        MinimaxAI ai = new MinimaxAI(state.turn(), 3);
+        Action bestMove = ai.chooseMove(state);
+
+        if (bestMove == null) {
+            return;
+        }
+
+        if (bestMove instanceof Move move) {
+            ((SimpleObjectProperty<IState>) controller.state).set(state.move(move));
+        } else if (bestMove instanceof RemoveLine removeLine) {
+            ((SimpleObjectProperty<IState>) controller.state).set(state.removeLine(removeLine));
+        }
     }
 }

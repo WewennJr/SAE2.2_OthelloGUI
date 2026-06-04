@@ -1,5 +1,7 @@
 package but.info.sae2_12.ui.controllers;
 
+import but.info.sae2_12.App;
+import but.info.sae2_12.model.GameMode;
 import but.info.sae2_12.model.factory.FactoryCube;
 import but.info.sae2_12.model.factory.FactoryDoubled;
 import but.info.sae2_12.model.state.IState;
@@ -39,6 +41,8 @@ public class AppController implements Initializable {
     public static final ObjectProperty<Color> couleur2 = new SimpleObjectProperty<>(Color.DARKGRAY);
     public static final ObjectProperty<Color> couleur3 = new SimpleObjectProperty<>(Color.LIGHTGRAY);
 
+    private static GameMode gameMode;
+
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,6 +53,8 @@ public class AppController implements Initializable {
         this.gameStateController.setController(this);
         setupGameClip();
         this.gameSettingsController.onAppControllerSet();
+
+        this.setGameMode(App.getGameMode());
 
         state.addListener((obs, oldState, newState) -> {
             if (newState != null) {
@@ -91,5 +97,13 @@ public class AppController implements Initializable {
 
     public void setCurrentMode(InteractionMode mode) {
         this.currentMode.set(mode);
+    }
+
+    public static void setGameMode(GameMode mode) {
+        gameMode = mode;
+    }
+
+    public static GameMode getGameMode() {
+        return gameMode;
     }
 }
