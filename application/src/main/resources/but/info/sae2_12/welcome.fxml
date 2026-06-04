@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0"
+      style="-fx-background-color: #fafafa;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="but.info.sae2_12.ui.controllers.WelcomeController">
+    <padding>
+        <Insets top="60.0" right="80.0" bottom="60.0" left="80.0"/>
+    </padding>
+
+    <Label text="YINSH"
+           style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+
+    <Button text="Joueur vs Joueur" onAction="#onPlayerVsPlayer"
+            maxWidth="200.0"
+            style="-fx-font-size: 13px; -fx-font-weight: bold;
+                   -fx-background-color: #0066cc; -fx-text-fill: white;
+                   -fx-background-radius: 4; -fx-padding: 10 20 10 20;"/>
+
+    <Button text="Joueur vs IA" onAction="#onPlayerVsIA"
+            maxWidth="200.0"
+            style="-fx-font-size: 13px; -fx-font-weight: bold;
+                   -fx-background-color: #0066cc; -fx-text-fill: white;
+                   -fx-background-radius: 4; -fx-padding: 10 20 10 20;"/>
+
+    <Button text="Charger une partie" onAction="#onLoad"
+            maxWidth="200.0"
+            style="-fx-font-size: 13px;
+                   -fx-background-color: #eeeeee; -fx-text-fill: #333333;
+                   -fx-background-radius: 4; -fx-padding: 10 20 10 20;"/>
+
+    <Button text="Quitter" onAction="#onQuit"
+            maxWidth="200.0"
+            style="-fx-font-size: 13px;
+                   -fx-background-color: #eeeeee; -fx-text-fill: #cc0000;
+                   -fx-background-radius: 4; -fx-padding: 10 20 10 20;"/>
+
+</VBox>
