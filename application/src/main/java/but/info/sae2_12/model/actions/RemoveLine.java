@@ -28,4 +28,9 @@ public class RemoveLine extends Action {
     public void setRing(Coordinate ring) {
         this.ring = ring;
     }
+
+    @Override
+    public String toString() {
+        return "Retirer la ligne " + line + " et l'anneau en " + ring;
+    }
 }

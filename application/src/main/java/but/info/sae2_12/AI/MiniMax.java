@@ -262,4 +262,37 @@ public class MiniMax {
             return null;
         }
     }
+
+    public SimpleDoubleProperty winScoreProperty() {
+        return WIN_SCORE;
+    }
+    public SimpleDoubleProperty ringRemovedWeightProperty() {
+        return RING_REMOVED_WEIGHT;
+    }
+    public SimpleDoubleProperty pawnWeightProperty() {
+        return PAWN_WEIGHT;
+    }
+    public SimpleDoubleProperty nearLineWeightProperty() {
+        return NEAR_LINE_WEIGHT;
+    }
+
+    public void setWinScore(double value) {
+        WIN_SCORE.set(value);
+        System.out.println("WIN_SCORE mis à jour : " + WIN_SCORE.get());
+    }
+
+    public void setRingRemovedWeight(double value) {
+        RING_REMOVED_WEIGHT.set(value);
+        System.out.println("RING_REMOVED_WEIGHT mis à jour : " + RING_REMOVED_WEIGHT.get());
+    }
+
+    public void setPawnWeight(double value) {
+        PAWN_WEIGHT.set(value);
+        System.out.println("PAWN_WEIGHT mis à jour : " + PAWN_WEIGHT.get());
+    }
+
+    public void setNearLineWeight(double value) {
+        NEAR_LINE_WEIGHT.set(value);
+        System.out.println("NEAR_LINE_WEIGHT mis à jour : " + NEAR_LINE_WEIGHT.get());
+    }
 }

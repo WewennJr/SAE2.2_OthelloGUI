@@ -38,6 +38,9 @@ public class PlayMode extends InteractionMode {
                 for (HexSquare hexSquare : square.appControllerInstance.hexSquares.values()) {
                     hexSquare.setIsIndicatorVisible(false);
                 }
+                if(!square.appControllerInstance.getState().getLines().isEmpty()) {
+                    square.appControllerInstance.setCurrentMode(new RemoveLineMode());
+                }
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Vous ne pouvez pas jouer ce déplacement");
