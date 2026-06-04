@@ -13,9 +13,24 @@ import javafx.util.Duration;
 
 import java.util.Set;
 
+/**
+ * Mode de jeu principal gérant les interactions de déplacement des anneaux.
+ * Permet de sélectionner un anneau, d’afficher les coups possibles et d’effectuer un déplacement.
+ * Gère également la transition vers la suppression de ligne et le déclenchement de l’IA.
+ */
 public class PlayMode extends InteractionMode {
     private Coordinate currentRingSelection = null;
 
+    /**
+     * Gère les clics sur une case en mode jeu.
+     * - Sélection d’un anneau
+     * - Affichage des déplacements possibles
+     * - Exécution d’un mouvement
+     * - Déclenchement éventuel de l’IA
+     *
+     * @param ev événement de souris
+     * @param square case hexagonale cliquée
+     */
     @Override
     public void handleClick(MouseEvent ev, HexSquare square) {
 

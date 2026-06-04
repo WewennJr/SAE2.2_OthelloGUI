@@ -8,10 +8,7 @@ import but.info.sae2_12.model.actions.Action;
 import but.info.sae2_12.model.actions.Move;
 import but.info.sae2_12.model.actions.RemoveLine;
 import but.info.sae2_12.model.state.IState;
-import but.info.sae2_12.model.tokens.Ring;
 import but.info.sae2_12.ui.AppControllerBase;
-import but.info.sae2_12.ui.interaction.PlayMode;
-import coordinates.Coordinate;
 import javafx.application.Platform;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
@@ -23,8 +20,12 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Set;
 
+/**
+ * Contrôleur gérant l’interface de configuration et d’interaction avec l’IA.
+ * Permet de régler les paramètres du Minimax, d’afficher l’évaluation du plateau
+ * et de déclencher les coups recommandés ou automatiques de l’IA.
+ */
 public class IAController extends AppControllerBase implements Initializable {
 
     @FXML private ProgressBar evaluationBar;
@@ -37,6 +38,9 @@ public class IAController extends AppControllerBase implements Initializable {
     private final MiniMax miniMax = new MiniMax();
     private final MinimaxAI minimaxAI = new MinimaxAI(Team.BLACK, 3);
 
+    /**
+     * Initialise les champs de récompense de l’IA.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         winScoreField.setText("100000.0");
@@ -47,6 +51,9 @@ public class IAController extends AppControllerBase implements Initializable {
         Platform.runLater(() -> winScoreField.getScene().getRoot().requestFocus());
     }
 
+    /**
+     * Met à jour la valeur du score de victoire utilisé par l’IA.
+     */
     @FXML
     public void onWinScoreChanged() {
         try {
@@ -57,6 +64,9 @@ public class IAController extends AppControllerBase implements Initializable {
         winScoreField.getScene().getRoot().requestFocus();
     }
 
+    /**
+     * Met à jour le poids associé aux anneaux supprimés dans l’évaluation de l’IA.
+     */
     @FXML
     public void onRingRemovedWeightChanged() {
         try {
@@ -67,6 +77,9 @@ public class IAController extends AppControllerBase implements Initializable {
         ringRemovedWeightField.getScene().getRoot().requestFocus();
     }
 
+    /**
+     * Met à jour le poids associé aux pions dans l’évaluation de l’IA.
+     */
     @FXML
     public void onPawnWeightChanged() {
         try {
@@ -77,6 +90,9 @@ public class IAController extends AppControllerBase implements Initializable {
         pawnWeightField.getScene().getRoot().requestFocus();
     }
 
+    /**
+     * Met à jour le poids lié à la proximité des lignes dans l’évaluation de l’IA.
+     */
     @FXML
     public void onNearLineWeightChanged() {
         try {
@@ -87,6 +103,11 @@ public class IAController extends AppControllerBase implements Initializable {
         nearLineWeightField.getScene().getRoot().requestFocus();
     }
 
+    /**
+     * Met à jour la barre d’évaluation en fonction de l’état du jeu.
+     *
+     * @param state état actuel du jeu
+     */
     public void updateEvaluationBar(IState state) {
         double score = miniMax.evaluate(state, Team.BLACK);
         double ratio = (score + 5_000.0) / 10_000.0;
@@ -95,6 +116,10 @@ public class IAController extends AppControllerBase implements Initializable {
         System.out.println("ProgressBar : " + ratio);
     }
 
+    /**
+     * Affiche et propose le meilleur coup calculé par l’IA.
+     * L’utilisateur choisit de le jouer ou non.
+     */
     @FXML
     public void onBestMoveClicked() {
         IState state = getController().state.getValue();
@@ -125,8 +150,6 @@ public class IAController extends AppControllerBase implements Initializable {
                         getController().setState(state.removeLine(removeLine));
                     }
 
-                    // Si on est en Player vs IA et que c'est maintenant au tour de l'IA,
-                    // lancer l'IA automatiquement (avec un court délai pour l'UI).
                     if (App.getGameMode() == GameMode.PLAYER_VS_AI
                             && getController().getState().turn() == Team.BLACK) {
                         PauseTransition pause = new PauseTransition(Duration.millis(300));
@@ -137,33 +160,33 @@ public class IAController extends AppControllerBase implements Initializable {
         });
     }
 
+    /**
+     * Fait jouer automatiquement l’IA.
+     *
+     * @param controller contrôleur principal du jeu
+     */
     public void playAI(AppController controller) {
         IState state = controller.state.getValue();
         MinimaxAI ai = new MinimaxAI(state.turn(), 3);
 
-        // Première décision (peut être un Move ou une RemoveLine si l'état l'exige)
         Action bestMove = ai.chooseMove(state);
         if (bestMove == null) return;
 
         try {
             if (bestMove instanceof Move move) {
-                // Appliquer le déplacement
                 ((SimpleObjectProperty<IState>) controller.state).set(state.move(move));
                 state = controller.state.getValue();
             } else if (bestMove instanceof RemoveLine removeLine) {
-                // Appliquer directement une suppression de ligne (rare ici)
                 ((SimpleObjectProperty<IState>) controller.state).set(state.removeLine(removeLine));
                 state = controller.state.getValue();
             }
         } catch (Exception e) {
-            // En cas d'erreur, on abandonne l'action de l'IA
             e.printStackTrace();
             return;
         }
 
-        // Si après le mouvement l'IA a créé(s) des ligne(s), elle doit les supprimer tant qu'il y en a
         while (!state.getLines().isEmpty() && state.turn() == ai.getAiTeam()) {
-            Action removal = ai.chooseMove(state); // chooseMove traitera la suppression si getLines() non vide
+            Action removal = ai.chooseMove(state);
             if (removal == null) break;
 
             if (removal instanceof RemoveLine rl) {
@@ -175,7 +198,6 @@ public class IAController extends AppControllerBase implements Initializable {
                     break;
                 }
             } else {
-                // Si l'IA renvoie autre chose (par sécurité), on arrête la boucle
                 break;
             }
         }
