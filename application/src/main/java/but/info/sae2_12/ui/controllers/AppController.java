@@ -25,12 +25,19 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ButtonBar;
 import but.info.sae2_12.model.Team;
 
+/**
+ * AppController
+ *
+ * Controleur principal du jeu (globalement quoi)
+ */
 public class AppController implements Initializable {
+    // Variable observables
     public ObjectProperty<InteractionMode> currentMode = new SimpleObjectProperty<>(new PlayMode());
 
     public HashMap<Coordinate, HexSquare> hexSquares = new HashMap<>();
     public final SimpleObjectProperty<IState> state = new SimpleObjectProperty<>(new FactoryCube().stateForWhiteLineTest());
 
+    // Trucs de FXML
     public @FXML GameController gameController;
     public @FXML StackPane gameContainer;
     public @FXML GameSettingsController gameSettingsController;
@@ -41,11 +48,15 @@ public class AppController implements Initializable {
     public static final ObjectProperty<Color> couleur2 = new SimpleObjectProperty<>(Color.DARKGRAY);
     public static final ObjectProperty<Color> couleur3 = new SimpleObjectProperty<>(Color.LIGHTGRAY);
 
+    // Welcome
     private static GameMode gameMode;
     private boolean gameEnded = false;
 
     @FXML
     @Override
+    /**
+     * Méthode implémentée de javafx
+     */
     public void initialize(URL location, ResourceBundle resources) {
         this.gameController.setController(this);
         this.gameSettingsController.setController(this);
@@ -55,7 +66,7 @@ public class AppController implements Initializable {
         setupGameClip();
         this.gameSettingsController.onAppControllerSet();
 
-        this.setGameMode(App.getGameMode());
+        setGameMode(App.getGameMode());
 
         state.addListener((obs, oldState, newState) -> {
             if (newState != null) {
@@ -69,6 +80,7 @@ public class AppController implements Initializable {
                     } catch (Exception ignored) {
                     }
 
+                    // Vainqueur
                     if (winner != null) {
                         gameEnded = true;
                         String winnerText = (winner == Team.WHITE) ? "Blanc" : "Noir";
@@ -98,6 +110,9 @@ public class AppController implements Initializable {
         gameStateController.refreshGameStateLabels(state.getValue());
     }
 
+    /**
+     * Initialisation du clip pour éviter de sortir le jeu du cadre
+     */
     private void setupGameClip() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(gameContainer.widthProperty());
@@ -105,6 +120,7 @@ public class AppController implements Initializable {
         gameContainer.setClip(clip);
     }
 
+    // UNUSED
     public ObjectProperty<Color> getCouleur1(){
         return couleur1;
     }
@@ -115,26 +131,50 @@ public class AppController implements Initializable {
         return couleur3;
     }
 
+    /**
+     * Récup le mode d'intéraction acutel
+     * @return InteractionMode actuel (edit, removeline, play, ...)
+     */
     public InteractionMode getCurrentMode() {
         return currentMode.getValue();
     }
 
+    /**
+     * Récup la state du jeu
+     * @return State
+     */
     public IState getState() {
         return state.getValue();
     }
 
+    /**
+     * Rechanger la state du jeu
+     * @param newState
+     */
     public void setState(IState newState) {
         this.state.setValue(newState);
     }
 
+    /**
+     * Change le mode d'intéraction (edit, removeline, ...)
+     * @param mode
+     */
     public void setCurrentMode(InteractionMode mode) {
         this.currentMode.set(mode);
     }
 
+    /**
+     * Permet de mettre le mode de jeu
+     * @param mode
+     */
     public static void setGameMode(GameMode mode) {
         gameMode = mode;
     }
 
+    /**
+     * Permet de récup le mode de jeu courant
+     * @return GameMode choisi pour la partie
+     */
     public static GameMode getGameMode() {
         return gameMode;
     }

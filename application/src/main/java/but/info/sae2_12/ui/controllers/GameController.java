@@ -28,6 +28,9 @@ public class GameController extends AppControllerBase {
     private double lastMouseX;
     private double lastMouseY;
 
+    /**
+     * cf. AppControllerBase.java
+     */
     @Override
     public void onMainControllerSetup() {
         super.onMainControllerSetup();
@@ -37,12 +40,25 @@ public class GameController extends AppControllerBase {
         this.getController().state.subscribe((state) -> initMap());
     }
 
+    /**
+     * Initialise la priorité de rendu (complément de AppController#setupClip)
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param rb
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         pane.setViewOrder(Double.MAX_VALUE);
         pane.toBack();
     }
 
+    /**
+     * Permet de préparer la map de la carte et prépare le rendu des lignes
+     */
     public void initMap() {
         for (HexSquare square : this.getController().hexSquares.values()) {
             square.cleanup();
@@ -50,7 +66,7 @@ public class GameController extends AppControllerBase {
         this.getController().hexSquares.clear();
         this.pane.getChildren().clear();
 
-        List<Set<Coordinate>> lines = IState.getPawnsLines(getController().getState().board());
+        List<Set<Coordinate>> lines = IState.getPawnsLines(getController().getState().board()); // Précalcule les lignes car la factory ne le fait pas forcément
         getController().setState(new State(
                 getController().getState().board(),
                 getController().getState().turn(),
@@ -64,10 +80,13 @@ public class GameController extends AppControllerBase {
             this.getController().setCurrentMode(new PlayMode());
         }
 
+        // création des hexagones
         this.getController().getState().board().forEach((coord, tok) -> {
             HexSquare hexSquare = new HexSquare(this.getController(), coord, computeColor(coord.to2DCoordinate().x(), coord.to2DCoordinate().y()).get());
             this.getController().hexSquares.put(coord, hexSquare);
         });
+
+        // rendu des lignes en vert
 
         for (Set<Coordinate> line : this.getController().getState().getLines()) {
             for (Coordinate coordinate : line) {
@@ -76,13 +95,20 @@ public class GameController extends AppControllerBase {
         }
     }
 
+    /**
+     * Méthode qui permet de préparer le terrain pour la navigation dans le jeu
+     */
     private void setupNavigation() {
         HexSquare.CELLSIZE.set(35);
+
+        // Quand l'user clique on met de côté la position du click en mémoire
         this.pane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             lastMouseX = event.getSceneX();
             lastMouseY = event.getSceneY();
         });
 
+
+        // sombres calculs quand l'user déplace sa sourie
         this.pane.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
             if (!(event.getPickResult().getIntersectedNode() instanceof HexSquare)) {
                 double deltaX = event.getSceneX() - lastMouseX;
@@ -96,6 +122,7 @@ public class GameController extends AppControllerBase {
             }
         });
 
+        // Et l'évent échangé contre un pitch
         this.pane.setOnScroll(event -> {
             double zoomFactor = 1.05;
             if (event.getDeltaY() < 0) {
@@ -106,6 +133,10 @@ public class GameController extends AppControllerBase {
         });
     }
 
+    /**
+     * Permet de changer le mode de coordonées à l'affichage
+     * @param mode
+     */
     public void setCoordMode(String mode) {
         getController().hexSquares.forEach((coord, hex) -> {
             if (mode.equals("Cubique") && coord instanceof CoordinateCube c) {
@@ -116,6 +147,12 @@ public class GameController extends AppControllerBase {
         });
     }
 
+    /**
+     * Calculer les couleurs par défaut (nuances de gris)
+     * @param x  position x sur la grid
+     * @param y en vrai c'est pas utilisé
+     * @return
+     */
     public ObjectProperty<Color> computeColor(int x, int y) {
         return switch (x % 3) {
             case 0 -> AppController.couleur1;
