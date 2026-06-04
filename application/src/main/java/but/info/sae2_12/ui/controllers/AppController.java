@@ -1,14 +1,12 @@
 package but.info.sae2_12.ui.controllers;
 
 import but.info.sae2_12.model.factory.FactoryCube;
-import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.state.IState;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
