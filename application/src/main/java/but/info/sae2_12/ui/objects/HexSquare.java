@@ -6,6 +6,7 @@ import but.info.sae2_12.model.tokens.Token;
 import but.info.sae2_12.ui.controllers.AppController;
 import coordinates.Coordinate;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -14,9 +15,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Subscription;
 
 public class HexSquare extends Polygon {
-    public static final int CELLSIZE = 50;
+    public static final SimpleIntegerProperty CELLSIZE = new SimpleIntegerProperty(35);
     public AppController appControllerInstance;
     SimpleBooleanProperty isIndicatorVisible = new SimpleBooleanProperty(false);
     Color color;
@@ -24,30 +26,56 @@ public class HexSquare extends Polygon {
     Circle shape;
     Circle visualIndicator;
     Label label;
+    private final Subscription sizeSubscription;
+    private Subscription indicatorSubscription;
 
     public HexSquare(AppController appController, Coordinate coordinate, Color color) {
         this.coordinate = coordinate;
         this.color = color;
         this.appControllerInstance = appController;
 
-        getPoints().addAll((double) (-CELLSIZE / 2), (double) (-CELLSIZE / 4), (double) 0, (double) (-CELLSIZE / 2), (double) (CELLSIZE / 2), (double) (-CELLSIZE / 4), (double) (CELLSIZE / 2), (double) (CELLSIZE / 4), (double) 0, (double) (CELLSIZE / 2), (double) (-CELLSIZE / 2), (double) (CELLSIZE / 4));
-
-        double col = coordinate.to2DCoordinate().x();
-        double row = coordinate.to2DCoordinate().y();
         setFill(color);
         setStroke(Color.BLACK);
         setStrokeWidth(0.5);
         setStrokeType(StrokeType.CENTERED);
 
-        setLayoutX((col * CELLSIZE) / 2);
-        setLayoutY(row * (CELLSIZE) - ((double) CELLSIZE / 4 * row));
-
         this.appControllerInstance.gameController.pane.getChildren().add(this);
-
-        buildShape();
         buildLabel();
-        buildVisualIndicator();
+        updateLayoutForSize(CELLSIZE.get());
+
+        this.sizeSubscription = CELLSIZE.subscribe((val) -> {
+            updateLayoutForSize(val.intValue());
+        });
+
         bindEventsToNode(this, visualIndicator, label);
+    }
+
+    private void updateLayoutForSize(int size) {
+        double col = coordinate.to2DCoordinate().x();
+        double row = coordinate.to2DCoordinate().y();
+
+        if (shape != null) {
+            this.appControllerInstance.gameController.pane.getChildren().remove(shape);
+        }
+        if (visualIndicator != null) {
+            this.appControllerInstance.gameController.pane.getChildren().remove(visualIndicator);
+        }
+
+        setLayoutX((col * size) / 2);
+        setLayoutY(row * size - ((double) size / 4 * row));
+
+        getPoints().clear();
+        getPoints().addAll(
+                (double) (-size / 2), (double) (-size / 4),
+                (double) 0, (double) (-size / 2),
+                (double) (size / 2), (double) (-size / 4),
+                (double) (size / 2), (double) (size / 4),
+                (double) 0, (double) (size / 2),
+                (double) (-size / 2), (double) (size / 4)
+        );
+
+        buildShape(size);
+        buildVisualIndicator(size);
     }
 
     private void buildLabel() {
@@ -60,29 +88,31 @@ public class HexSquare extends Polygon {
         this.label.setTextAlignment(TextAlignment.CENTER);
     }
 
-    private void buildVisualIndicator() {
-        this.visualIndicator = new Circle(CELLSIZE / 3.5, Color.RED);
+    private void buildVisualIndicator(int size) {
+        this.visualIndicator = new Circle(size / 3.5, Color.RED);
 
         visualIndicator.setCenterX(getLayoutX());
         visualIndicator.setCenterY(getLayoutY());
         this.appControllerInstance.gameController.pane.getChildren().add(visualIndicator);
         this.visualIndicator.setFill(Color.TRANSPARENT);
         this.visualIndicator.setStrokeWidth(2f);
-        this.visualIndicator.setFill(Color.TRANSPARENT);
         this.visualIndicator.setStroke(Color.DARKORANGE);
         this.visualIndicator.toFront();
-        isIndicatorVisible.subscribe((value) -> visualIndicator.setVisible(value));
 
+        if (indicatorSubscription != null) {
+            indicatorSubscription.unsubscribe();
+        }
+        indicatorSubscription = isIndicatorVisible.subscribe((value) -> visualIndicator.setVisible(value));
     }
 
-    private void buildShape() {
+    private void buildShape(int size) {
         Token token = this.appControllerInstance.getState().board().get(coordinate);
 
         if (token instanceof Pawn pawn) {
-            this.shape = new Circle(CELLSIZE / 4.0, pawn.getTeam().getColor());
+            this.shape = new Circle(size / 4.0, pawn.getTeam().getColor());
         }
         if (token instanceof Ring ring) {
-            this.shape = new Circle(CELLSIZE / 3.0, ring.getTeam().getColor());
+            this.shape = new Circle(size / 3.0, ring.getTeam().getColor());
             this.shape.setFill(Color.TRANSPARENT);
             this.shape.setStrokeWidth(3f);
             this.shape.setStroke(ring.getTeam().getColor());
@@ -113,6 +143,21 @@ public class HexSquare extends Polygon {
     }
 
     public void setVisibleAndChilds(Boolean newVal) {
+        setVisible(newVal);
+        shape.setVisible(newVal);
+        label.setVisible(newVal);
+        visualIndicator.setVisible(newVal);
 
+    }
+
+    public void cleanup() {
+        if (sizeSubscription != null) {
+            sizeSubscription.unsubscribe();
+        }
+        if (indicatorSubscription != null) {
+            indicatorSubscription.unsubscribe();
+        }
+
+        this.appControllerInstance.gameController.pane.getChildren().removeAll(this, label, shape, visualIndicator);
     }
 }

@@ -62,6 +62,8 @@ public class GameSettingsController extends AppControllerBase {
         testDouble.setOnAction(event -> {
             getController().state.set(new FactoryDoubled().doubleLineStateTest());
         });
+
+        zoom.valueProperty().subscribe(val -> HexSquare.CELLSIZE.set(val.intValue()));
     }
 
     @FXML

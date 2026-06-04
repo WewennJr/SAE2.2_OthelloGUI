@@ -7,19 +7,13 @@ import but.info.sae2_12.ui.interaction.RemoveLineMode;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -43,23 +37,26 @@ public class GameController extends AppControllerBase {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        pane.toBack();
     }
 
-
     public void initMap() {
+        for (HexSquare square : this.getController().hexSquares.values()) {
+            square.cleanup();
+        }
         this.getController().hexSquares.clear();
         this.pane.getChildren().clear();
+
         List<Set<Coordinate>> lines = IState.getPawnsLines(getController().getState().board());
         getController().setState(new State(
                 getController().getState().board(),
                 getController().getState().turn(),
                 lines
         ));
-        if(!lines.isEmpty()) {
+
+        if (!lines.isEmpty()) {
             this.getController().setCurrentMode(new RemoveLineMode());
         }
-
 
         this.getController().getState().board().forEach((coord, tok) -> {
             HexSquare hexSquare = new HexSquare(this.getController(), coord, computeColor(coord.to2DCoordinate().x(), coord.to2DCoordinate().y()).get());
@@ -71,15 +68,13 @@ public class GameController extends AppControllerBase {
                 this.getController().hexSquares.get(coordinate).setFill(Color.LIGHTGREEN);
             }
         }
-
     }
 
     private void setupNavigation() {
+        HexSquare.CELLSIZE.set(35);
         this.pane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (!(event.getPickResult().getIntersectedNode() instanceof HexSquare)) {
-                lastMouseX = event.getSceneX();
-                lastMouseY = event.getSceneY();
-            }
+            lastMouseX = event.getSceneX();
+            lastMouseY = event.getSceneY();
         });
 
         this.pane.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
