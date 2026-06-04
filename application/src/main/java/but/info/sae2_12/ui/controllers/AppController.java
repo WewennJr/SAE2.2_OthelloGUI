@@ -3,18 +3,13 @@ package but.info.sae2_12.ui.controllers;
 import but.info.sae2_12.App;
 import but.info.sae2_12.model.GameMode;
 import but.info.sae2_12.model.factory.FactoryCube;
-import but.info.sae2_12.model.factory.FactoryDoubled;
 import but.info.sae2_12.model.state.IState;
 import but.info.sae2_12.ui.interaction.InteractionMode;
 import but.info.sae2_12.ui.interaction.PlayMode;
-import but.info.sae2_12.ui.interaction.TempInteractMode;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
@@ -24,6 +19,11 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar;
+import but.info.sae2_12.model.Team;
 
 public class AppController implements Initializable {
     public ObjectProperty<InteractionMode> currentMode = new SimpleObjectProperty<>(new PlayMode());
@@ -42,6 +42,7 @@ public class AppController implements Initializable {
     public static final ObjectProperty<Color> couleur3 = new SimpleObjectProperty<>(Color.LIGHTGRAY);
 
     private static GameMode gameMode;
+    private boolean gameEnded = false;
 
     @FXML
     @Override
@@ -59,6 +60,37 @@ public class AppController implements Initializable {
         state.addListener((obs, oldState, newState) -> {
             if (newState != null) {
                 iaController.updateEvaluationBar(newState);
+                // Vérifier si la partie est terminée
+                if (!gameEnded) {
+                    Team winner = null;
+                    try {
+                        if (newState.rings().get(Team.BLACK).size() <= 2) winner = Team.BLACK;
+                        else if (newState.rings().get(Team.WHITE).size() <= 2) winner = Team.WHITE;
+                    } catch (Exception ignored) {
+                    }
+
+                    if (winner != null) {
+                        gameEnded = true;
+                        String winnerText = (winner == Team.WHITE) ? "Blanc" : "Noir";
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Partie terminée");
+                            alert.setHeaderText(null);
+                            alert.setContentText(winnerText + " a gagné");
+                            ButtonType home = new ButtonType("Retour à l'accueil", ButtonBar.ButtonData.OK_DONE);
+                            alert.getButtonTypes().setAll(home);
+                            alert.showAndWait().ifPresent(response -> {
+                                if (response == home) {
+                                    try {
+                                        App.setRoot("welcome");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
             }
         });
 
