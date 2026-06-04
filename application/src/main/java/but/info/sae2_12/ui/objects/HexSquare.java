@@ -17,9 +17,16 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Subscription;
 
+/**
+ * HexSquare
+ * La classe la plus longue et moins fun
+ * Élément custom de JavaFX pour afficher un hexagone
+ */
 public class HexSquare extends Polygon {
+    // vars statique pour les deux range de l'UI
     public static final SimpleIntegerProperty CELLSIZE = new SimpleIntegerProperty(35);
     public static final SimpleIntegerProperty EPAISSEUR = new SimpleIntegerProperty(2);
+    // Demandés dans la consigne
     public AppController appControllerInstance;
     SimpleBooleanProperty isIndicatorVisible = new SimpleBooleanProperty(false);
     Color color;
@@ -27,9 +34,16 @@ public class HexSquare extends Polygon {
     Circle shape;
     Circle visualIndicator;
     public Label label;
+    // Pour unsubscribe et éviter d'avoir plein de binds inutiles
     private final Subscription sizeSubscription;
     private Subscription indicatorSubscription;
 
+    /**
+     * Permet de créer un élément hexagone
+     * @param appController controller avec state valide
+     * @param coordinate Position de l'hexagone acutel
+     * @param color Couleur de celui-ci
+     */
     public HexSquare(AppController appController, Coordinate coordinate, Color color) {
         this.coordinate = coordinate;
         this.color = color;
@@ -37,6 +51,7 @@ public class HexSquare extends Polygon {
 
         setFill(color);
         setStroke(Color.BLACK);
+        // peut changer
         EPAISSEUR.addListener((obs, oldVal, newVal) -> setStrokeWidth(newVal.doubleValue()));
         setStrokeType(StrokeType.CENTERED);
 
@@ -47,14 +62,18 @@ public class HexSquare extends Polygon {
         this.sizeSubscription = CELLSIZE.subscribe((val) -> {
             updateLayoutForSize(val.intValue());
         });
-
         bindEventsToNode(this, visualIndicator, label);
     }
 
+    /**
+     * Méthode appellée pour redessiner l'hexagone quand il est actualisé
+     * @param size
+     */
     private void updateLayoutForSize(int size) {
         double col = coordinate.to2DCoordinate().x();
         double row = coordinate.to2DCoordinate().y();
 
+        // retirer les éléments qui avaient déjà été créés avant de les recréer
         if (shape != null) {
             this.appControllerInstance.gameController.pane.getChildren().remove(shape);
         }
@@ -75,10 +94,14 @@ public class HexSquare extends Polygon {
                 (double) (-size / 2), (double) (size / 4)
         );
 
+        // Et on recréer des éléments de déco
         buildShape(size);
         buildVisualIndicator(size);
     }
 
+    /**
+     * Permet de dessiner le texte qui contiendra les cooronées
+     */
     private void buildLabel() {
         this.label = new Label(coordinate.to2DCoordinate().x() + "," + coordinate.to2DCoordinate().y());
         this.label.layoutXProperty().bind(this.layoutXProperty().subtract(this.label.widthProperty().divide(2)));
@@ -89,6 +112,10 @@ public class HexSquare extends Polygon {
         this.label.setTextAlignment(TextAlignment.CENTER);
     }
 
+    /**
+     * Permet de dessiner l'indicateur visuel (le rond orange)
+     * @param size taille absolu en px
+     */
     private void buildVisualIndicator(int size) {
         this.visualIndicator = new Circle(size / 5f, Color.RED);
 
@@ -105,6 +132,10 @@ public class HexSquare extends Polygon {
         indicatorSubscription = isIndicatorVisible.subscribe((value) -> visualIndicator.setVisible(value));
     }
 
+    /**
+     * Parei que buildVisualIndicator mais pour dessiner l'anneau ou le pion blanc ou noir
+     * @param size taille en px
+     */
     private void buildShape(int size) {
         Token token = this.appControllerInstance.getState().board().get(coordinate);
 
@@ -126,10 +157,18 @@ public class HexSquare extends Polygon {
         }
     }
 
+    /**
+     * Afficher ou cacher l'indicateur visuel orange
+     */
     public void toggleIndicator() {
         this.isIndicatorVisible.set(!this.isIndicatorVisible.get());
     }
 
+    /**
+     * Méthode interne pour bind un event à des noeuds pour permettre aux éléments sur l'hexagone de quand même
+     * déclancher les events de click, hover, etc... et pas juste le polygone de base
+     * @param n
+     */
     private void bindEventsToNode(Node... n) {
         for (Node node : n) {
             node.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> appControllerInstance.getCurrentMode().handleClick(event, this));
@@ -138,10 +177,15 @@ public class HexSquare extends Polygon {
         }
     }
 
+    /**
+     * Rédéfinir à la main l'affichage de l'indicateur
+     * @param isIndicatorVisible
+     */
     public void setIsIndicatorVisible(boolean isIndicatorVisible) {
         this.isIndicatorVisible.set(isIndicatorVisible);
     }
 
+    // UNUSED
     public void setVisibleAndChilds(Boolean newVal) {
         setVisible(newVal);
         shape.setVisible(newVal);
@@ -150,6 +194,9 @@ public class HexSquare extends Polygon {
 
     }
 
+    /**
+     * Permet d'unbind les bindings
+     */
     public void cleanup() {
         if (sizeSubscription != null) {
             sizeSubscription.unsubscribe();
