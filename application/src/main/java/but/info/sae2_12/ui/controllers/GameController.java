@@ -5,6 +5,7 @@ import but.info.sae2_12.model.state.State;
 import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.interaction.RemoveLineMode;
 import but.info.sae2_12.ui.interaction.PlayMode;
+import but.info.sae2_12.ui.interaction.EditionMode;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
 import coordinates.CoordinateCube;
@@ -73,11 +74,14 @@ public class GameController extends AppControllerBase {
                 lines
         ));
 
-        if (!lines.isEmpty()) {
+        if(!lines.isEmpty()) {
             this.getController().setCurrentMode(new RemoveLineMode());
         } else {
             // s'il n'y a plus de lignes, revenir au mode de jeu normal
-            this.getController().setCurrentMode(new PlayMode());
+            // sauf si l'utilisateur est en mode édition : ne pas écraser EditionMode
+            if (!(this.getController().getCurrentMode() instanceof EditionMode)) {
+                this.getController().setCurrentMode(new PlayMode());
+            }
         }
 
         // création des hexagones
