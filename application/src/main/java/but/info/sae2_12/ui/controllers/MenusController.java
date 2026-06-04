@@ -158,7 +158,7 @@ public class MenusController extends AppControllerBase {
             String tokenType = parts[3];
 
             Team tokenTeam;
-            if (parts[4] == "B") {
+            if (parts[4].equals("B")) {
                 tokenTeam = Team.BLACK;
             } else {
                 tokenTeam = Team.WHITE;
@@ -171,7 +171,7 @@ public class MenusController extends AppControllerBase {
                 token = new Pawn(tokenTeam);
             }
 
-            state = state.toggleToken(coordinate, tokenTeam, tokenType.getClass());
+            state = state.toggleToken(coordinate, tokenTeam, token.getClass());
         }
 
         return state;
