@@ -22,7 +22,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class MenusController extends AppControllerBase {
 
@@ -182,4 +184,8 @@ public class MenusController extends AppControllerBase {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
 }

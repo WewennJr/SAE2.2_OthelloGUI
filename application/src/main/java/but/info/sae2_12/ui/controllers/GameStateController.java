@@ -6,7 +6,9 @@ import but.info.sae2_12.ui.AppControllerBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class GameStateController extends AppControllerBase {
 
@@ -74,5 +76,10 @@ public class GameStateController extends AppControllerBase {
         else {
             return "Noir";
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
     }
 }

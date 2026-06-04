@@ -51,7 +51,7 @@ public class AppController implements Initializable {
             }
         });
 
-        state.subscribe((state) -> gameStateController.refreshGameStateLabels(newState));
+        state.subscribe((state) -> gameStateController.refreshGameStateLabels(state));
         gameStateController.refreshGameStateLabels(state.getValue());
     }
 
