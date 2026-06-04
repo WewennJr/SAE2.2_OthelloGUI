@@ -5,8 +5,14 @@ import but.info.sae2_12.model.GameMode;
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 
+/**
+ * Contrôleur de l'écran d'accueil.
+ */
 public class WelcomeController {
 
+    /**
+     * Lance une partie en Player Vs Player.
+     */
     @FXML
     public void onPlayerVsPlayer() {
         try {
@@ -17,6 +23,9 @@ public class WelcomeController {
         }
     }
 
+    /**
+     * Lance une partie en Player Vs AI.
+     */
     @FXML
     public void onPlayerVsIA() {
         try {
@@ -27,6 +36,9 @@ public class WelcomeController {
         }
     }
 
+    /**
+     * Quitte l'application quand on a lancé pour rien ou fini une partie.
+     */
     @FXML
     public void onQuit() {
         Platform.exit();

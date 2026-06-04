@@ -1,6 +1,5 @@
 package but.info.sae2_12.ui.interaction;
 
-import but.info.sae2_12.model.actions.Move;
 import but.info.sae2_12.model.actions.RemoveLine;
 import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.state.IState;
@@ -11,7 +10,6 @@ import javafx.util.Duration;
 import but.info.sae2_12.model.tokens.Ring;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
-import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,10 +19,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Mode d’interaction permettant la suppression de lignes sur le plateau.
+ * Gère la sélection d’une ligne complète, la visualisation des cases concernées
+ * et son retrait du plateau. Assure également les transitions de mode de jeu.
+ */
 public class RemoveLineMode extends InteractionMode {
     private Set<Coordinate> currentLineSelection = null;
     private final Map<Coordinate, Paint> colorMap = new HashMap<>(); // coord -> old color
 
+    /**
+     * Gère les clics sur une case en mode suppression de ligne.
+     * - Sélection d’une ligne
+     * - Affichage visuel des cases concernées
+     * - Suppression de la ligne sélectionnée
+     * - Retour au mode de jeu si nécessaire
+     *
+     * @param ev événement de souris
+     * @param square case hexagonale cliquée
+     */
     @Override
     public void handleClick(MouseEvent ev, HexSquare square) {
         IState currentGameState = square.appControllerInstance.getState();
@@ -58,6 +71,12 @@ public class RemoveLineMode extends InteractionMode {
         }
     }
 
+    /**
+     * Gère l’effet visuel lorsque la souris entre sur une case.
+     *
+     * @param ev événement de souris
+     * @param square case survolée
+     */
     @Override
     public void entered(MouseEvent ev, HexSquare square) {
         IState currentGameState = square.appControllerInstance.getState();
@@ -80,6 +99,12 @@ public class RemoveLineMode extends InteractionMode {
 
     }
 
+    /**
+     * Gère l’effet visuel lorsque la souris quitte une case.
+     *
+     * @param ev événement de souris
+     * @param square case quittée
+     */
     @Override
     public void exited(MouseEvent ev, HexSquare square) {
         if (currentLineSelection != null) {
