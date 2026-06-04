@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.scene.control.Button?>
 <VBox spacing="10.0" xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="but.info.sae2_12.ui.controllers.IAController">
@@ -54,5 +55,8 @@
                      style="-fx-accent: black; -fx-control-inner-background: white;"/>
         <Label text="Blancs" style="-fx-font-style: italic;"/>
     </HBox>
+
+    <Button text="Meilleur coup" onAction="#onBestMoveClicked"
+            style="-fx-font-weight: bold;"/>
 
 </VBox>

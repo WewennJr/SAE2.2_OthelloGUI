@@ -3,11 +3,13 @@ package but.info.sae2_12.ui.controllers;
 import but.info.sae2_12.AI.MiniMax;
 import but.info.sae2_12.AI.MinimaxAI;
 import but.info.sae2_12.model.Team;
+import but.info.sae2_12.model.actions.Action;
 import but.info.sae2_12.model.state.IState;
 import but.info.sae2_12.ui.AppControllerBase;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 
@@ -40,7 +42,7 @@ public class IAController extends AppControllerBase implements Initializable {
     public void onWinScoreChanged() {
         try {
             minimaxAI.setWinScore(Double.parseDouble(winScoreField.getText()));
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException e) {
             winScoreField.setText("100000.0");
         }
         winScoreField.getScene().getRoot().requestFocus();
@@ -50,7 +52,7 @@ public class IAController extends AppControllerBase implements Initializable {
     public void onRingRemovedWeightChanged() {
         try {
             minimaxAI.setRingRemovedWeight(Double.parseDouble(ringRemovedWeightField.getText()));
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException e) {
             ringRemovedWeightField.setText("1000.0");
         }
         ringRemovedWeightField.getScene().getRoot().requestFocus();
@@ -60,7 +62,7 @@ public class IAController extends AppControllerBase implements Initializable {
     public void onPawnWeightChanged() {
         try {
             minimaxAI.setPawnWeight(Double.parseDouble(pawnWeightField.getText()));
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException e) {
             pawnWeightField.setText("10.0");
         }
         pawnWeightField.getScene().getRoot().requestFocus();
@@ -70,7 +72,7 @@ public class IAController extends AppControllerBase implements Initializable {
     public void onNearLineWeightChanged() {
         try {
             minimaxAI.setNearLineWeight(Double.parseDouble(nearLineWeightField.getText()));
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException e) {
             nearLineWeightField.setText("50.0");
         }
         nearLineWeightField.getScene().getRoot().requestFocus();
@@ -81,5 +83,22 @@ public class IAController extends AppControllerBase implements Initializable {
         double ratio = (score + 100_000.0) / 200_000.0;
         ratio = Math.max(0.0, Math.min(1.0, ratio));
         evaluationBar.setProgress(ratio);
+    }
+
+    @FXML
+    public void onBestMoveClicked() {
+        IState state = getController().state.getValue();
+        MinimaxAI ai = new MinimaxAI(state.turn(), 3);
+        Action bestMove = ai.chooseMove(state);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Meilleur coup");
+        alert.setHeaderText("L'IA recommande :");
+        if (bestMove != null) {
+            alert.setContentText(bestMove.toString());
+        } else {
+            alert.setContentText("Aucun coup disponible");
+        }
+        alert.showAndWait();
     }
 }
