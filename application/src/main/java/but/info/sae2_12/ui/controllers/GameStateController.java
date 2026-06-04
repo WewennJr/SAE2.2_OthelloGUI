@@ -40,18 +40,28 @@ public class GameStateController extends AppControllerBase {
     }
 
     private int countRings(IState currentState) {
-        int count = 0;
-        for (List<?> teamRings : currentState.rings().values()) {
-            count += teamRings.size();
+        if (currentState == null) {
+            return 0;
         }
-        return count;
+        List<?> rings = currentState.rings().get(currentState.turn());
+        if ((rings == null)) {
+            return 0;
+        }
+        else {
+            return rings.size();
+        }
     }
 
     private int countPawns(IState currentState) {
+        if (currentState == null) {
+            return 0;
+        }
         int count = 0;
         for (Object token : currentState.board().values()) {
-            if (token instanceof but.info.sae2_12.model.tokens.Pawn) {
-                count++;
+            if (token instanceof but.info.sae2_12.model.tokens.Pawn p) {
+                if (p.getTeam() == currentState.turn()) {
+                    count++;
+                }
             }
         }
         return count;
