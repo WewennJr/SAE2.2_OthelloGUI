@@ -11,5 +11,10 @@ public abstract class AppControllerBase {
 
     public void setController(AppController controller) {
         this.controller = controller;
+        this.onMainControllerSetup();
+    }
+
+    public void onMainControllerSetup() {
+        return;
     }
 }

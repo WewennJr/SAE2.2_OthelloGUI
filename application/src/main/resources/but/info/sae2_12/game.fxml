@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
-<Canvas xmlns="http://javafx.com/javafx/21"
-        xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="but.info.sae2_12.ui.controllers.GameController"/>
+<?import javafx.scene.layout.Pane?>
+<Pane xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="pane"
+      fx:controller="but.info.sae2_12.ui.controllers.GameController"/>
