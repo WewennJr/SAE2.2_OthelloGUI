@@ -1,8 +1,12 @@
 package but.info.sae2_12.ui;
 
 import but.info.sae2_12.ui.controllers.AppController;
+import javafx.fxml.Initializable;
 
-public abstract class AppControllerBase {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public abstract class AppControllerBase implements Initializable {
     private AppController controller;
 
     public AppController getController() {
@@ -17,4 +21,6 @@ public abstract class AppControllerBase {
     public void onMainControllerSetup() {
         return;
     }
+
+    public abstract void initialize(URL url, ResourceBundle rb);
 }

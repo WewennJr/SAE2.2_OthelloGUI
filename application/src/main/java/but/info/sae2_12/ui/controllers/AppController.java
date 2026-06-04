@@ -34,6 +34,9 @@ public class AppController implements Initializable {
     public @FXML MenusController menusController;
     public @FXML IAController iaController;
     public @FXML GameStateController gameStateController;
+    public static final ObjectProperty<Color> couleur1 = new SimpleObjectProperty<>(Color.GREY);
+    public static final ObjectProperty<Color> couleur2 = new SimpleObjectProperty<>(Color.DARKGRAY);
+    public static final ObjectProperty<Color> couleur3 = new SimpleObjectProperty<>(Color.LIGHTGRAY);
 
     @FXML
     @Override
@@ -44,6 +47,17 @@ public class AppController implements Initializable {
         this.iaController.setController(this);
         this.gameStateController.setController(this);
     }
+
+    public ObjectProperty<Color> getCouleur1(){
+        return couleur1;
+    }
+    public ObjectProperty<Color> getCouleur2(){
+        return couleur2;
+    }
+    public ObjectProperty<Color> getCouleur3(){
+        return couleur3;
+    }
+}
 
     public InteractionMode getCurrentMode() {
         return currentMode.getValue();
