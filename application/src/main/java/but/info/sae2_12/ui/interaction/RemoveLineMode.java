@@ -2,7 +2,12 @@ package but.info.sae2_12.ui.interaction;
 
 import but.info.sae2_12.model.actions.Move;
 import but.info.sae2_12.model.actions.RemoveLine;
+import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.state.IState;
+import but.info.sae2_12.App;
+import but.info.sae2_12.model.GameMode;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import but.info.sae2_12.model.tokens.Ring;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
@@ -42,6 +47,13 @@ public class RemoveLineMode extends InteractionMode {
             square.appControllerInstance.gameController.initMap();
             if(square.appControllerInstance.getState().getLines().isEmpty()) {
                 square.appControllerInstance.setCurrentMode(new PlayMode());
+                  // Vérifier si c'est au tour de l'IA après la suppression de la ligne
+                  if (App.getGameMode() == GameMode.PLAYER_VS_AI
+                          && square.appControllerInstance.getState().turn() == Team.BLACK) {
+                      PauseTransition pause = new PauseTransition(Duration.millis(300));
+                      pause.setOnFinished(e -> square.appControllerInstance.iaController.playAI(square.appControllerInstance));
+                      pause.play();
+                  }
             }
         }
     }
