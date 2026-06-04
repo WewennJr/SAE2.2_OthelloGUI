@@ -1,5 +1,9 @@
 package but.info.sae2_12.ui.controllers;
 
+import but.info.sae2_12.model.factory.FactoryCube;
+import but.info.sae2_12.model.state.IState;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -8,11 +12,13 @@ import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
 
-    private @FXML GameController gameController;
-    private @FXML GameSettingsController gameSettingsController;
-    private @FXML MenusController menusController;
-    private @FXML IAController iaController;
-    private @FXML GameStateController gameStateController;
+    public ObservableValue<IState> state = new SimpleObjectProperty<>(new FactoryCube().stateForWhiteLineTest());
+
+    public @FXML GameController gameController;
+    public @FXML GameSettingsController gameSettingsController;
+    public @FXML MenusController menusController;
+    public @FXML IAController iaController;
+    public @FXML GameStateController gameStateController;
 
     @FXML
     @Override
