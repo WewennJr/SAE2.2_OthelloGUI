@@ -3,7 +3,6 @@ package but.info.sae2_12.ui.controllers;
 import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.factory.FactoryCube;
 import but.info.sae2_12.model.state.IState;
-import but.info.sae2_12.model.state.State;
 import but.info.sae2_12.model.tokens.Pawn;
 import but.info.sae2_12.model.tokens.Ring;
 import but.info.sae2_12.model.tokens.Token;
@@ -16,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,10 +24,18 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Contrôleur de la barre de menu de l'application Yinsh.
+ * Gère les actions liées aux fichiers (sauvegarde, chargement), les informations de l'application et la fermeture du jeu.
+ */
 public class MenusController extends AppControllerBase {
 
     @FXML private MenuBar menuBar;
 
+    /**
+     * Récupère la fenêtre principale (Stage) associée à la barre de menu.
+     * * @return la Stage actuelle ou null si la barre de menu n'est pas encore affichée.
+     */
     private Stage getStage(){
         if (menuBar != null && menuBar.getScene() != null){
             return (Stage) menuBar.getScene().getWindow();
@@ -37,6 +43,10 @@ public class MenusController extends AppControllerBase {
         return null;
     }
 
+    /**
+     * Action du bouton "À propos".
+     * Affiche une fenêtre de dialogue d'information contenant les noms des développeurs du projet.
+     */
     public void onAbout() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
@@ -64,6 +74,10 @@ public class MenusController extends AppControllerBase {
         alert.showAndWait();
     }
 
+    /**
+     * Action du bouton "Sauvegarder".
+     * Ouvre une fenêtre de dialogue de sélection de fichier pour enregistrer la partie actuelle au format ".yinsh".
+     */
     @FXML
     public void onSave() throws IOException {
         FileChooser fc = new FileChooser();
@@ -76,6 +90,12 @@ public class MenusController extends AppControllerBase {
         saveState(file, getController().state.getValue());
     }
 
+    /**
+     * Écrit l'état actuel du jeu dans un fichier de sauvegarde.
+     * Le format inclut une sécurité, l'équipe dont c'est le tour, et la liste des pions/anneaux présents sur le plateau.
+     * @param file le fichier dans lequel sauvegarder la partie.
+     * @param state l'état actuel du jeu.
+     */
     public void saveState(File file, IState state) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
@@ -113,6 +133,10 @@ public class MenusController extends AppControllerBase {
         writer.close();
     }
 
+    /**
+     * Action du bouton "Charger".
+     * Ouvre une fenêtre de dialogue pour sélectionner un fichier de sauvegarde ".yinsh" et met à jour l'état du jeu.
+     */
     @FXML
     public void onLoad() throws IOException {
         FileChooser fc = new FileChooser();
@@ -127,6 +151,12 @@ public class MenusController extends AppControllerBase {
         }
     }
 
+    /**
+     * Ouvre un fichier de sauvegarde et met l'état du jeu correspondant.
+     * Vérifie la validité du fichier avec la sécurité "SAE212" avant de définir le tour actuel et la position des pièces.
+     * @param file le fichier de sauvegarde à charger.
+     * @return un nouvel objet IState représentant la partie chargée.
+     */
     public IState loadState(File file) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -177,6 +207,10 @@ public class MenusController extends AppControllerBase {
         return state;
     }
 
+    /**
+     * Action du bouton "Quitter".
+     * Ferme l'application si le contrôleur principal est actif.
+     */
     @FXML
     public void onQuit() {
         if (getController() != null) {
@@ -184,6 +218,9 @@ public class MenusController extends AppControllerBase {
         }
     }
 
+    /**
+     * Initialise le contrôleur.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
