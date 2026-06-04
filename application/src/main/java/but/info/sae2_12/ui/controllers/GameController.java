@@ -6,6 +6,7 @@ import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.interaction.RemoveLineMode;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
+import coordinates.CoordinateCube;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
@@ -87,6 +88,16 @@ public class GameController extends AppControllerBase {
                 pane.setTranslateY(translationYValue);
                 lastMouseX = event.getSceneX();
                 lastMouseY = event.getSceneY();
+            }
+        });
+    }
+
+    public void setCoordMode(String mode) {
+        getController().hexSquares.forEach((coord, hex) -> {
+            if (mode.equals("Cubique") && coord instanceof CoordinateCube c) {
+                hex.label.setText(c.getQ() + "," + c.getR() + "," + c.getS());
+            } else {
+                hex.label.setText(coord.to2DCoordinate().x() + "," + coord.to2DCoordinate().y());
             }
         });
     }

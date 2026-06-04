@@ -69,7 +69,7 @@
             </RadioButton>
          </children>
       </VBox>
-      <ColorPicker fx:id="colorPicker1" prefHeight="28.0" prefWidth="107.0">
+      <ColorPicker fx:id="colorPicker1">
          <VBox.margin>
             <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
