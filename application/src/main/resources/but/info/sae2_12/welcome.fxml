@@ -29,12 +29,6 @@
                    -fx-background-color: #0066cc; -fx-text-fill: white;
                    -fx-background-radius: 4; -fx-padding: 10 20 10 20;"/>
 
-    <Button text="Charger une partie" onAction="#onLoad"
-            maxWidth="200.0"
-            style="-fx-font-size: 13px;
-                   -fx-background-color: #eeeeee; -fx-text-fill: #333333;
-                   -fx-background-radius: 4; -fx-padding: 10 20 10 20;"/>
-
     <Button text="Quitter" onAction="#onQuit"
             maxWidth="200.0"
             style="-fx-font-size: 13px;

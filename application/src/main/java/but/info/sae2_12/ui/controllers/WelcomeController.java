@@ -19,11 +19,6 @@ public class WelcomeController {
     }
 
     @FXML
-    public void onLoad() {
-        // à implémenter
-    }
-
-    @FXML
     public void onQuit() {
         Platform.exit();
     }
