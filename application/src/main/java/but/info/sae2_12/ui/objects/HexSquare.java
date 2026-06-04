@@ -25,7 +25,7 @@ public class HexSquare extends Polygon {
     public Coordinate coordinate;
     Circle shape;
     Circle visualIndicator;
-    Label label;
+    public Label label;
     private final Subscription sizeSubscription;
     private Subscription indicatorSubscription;
 
@@ -89,14 +89,13 @@ public class HexSquare extends Polygon {
     }
 
     private void buildVisualIndicator(int size) {
-        this.visualIndicator = new Circle(size / 3.5, Color.RED);
+        this.visualIndicator = new Circle(size / 5f, Color.RED);
 
         visualIndicator.setCenterX(getLayoutX());
+        visualIndicator.setFocusTraversable(true);
         visualIndicator.setCenterY(getLayoutY());
         this.appControllerInstance.gameController.pane.getChildren().add(visualIndicator);
-        this.visualIndicator.setFill(Color.TRANSPARENT);
-        this.visualIndicator.setStrokeWidth(2f);
-        this.visualIndicator.setStroke(Color.DARKORANGE);
+        this.visualIndicator.setFill(Color.DARKORANGE);
         this.visualIndicator.toFront();
 
         if (indicatorSubscription != null) {

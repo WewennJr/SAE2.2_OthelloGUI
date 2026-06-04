@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="869.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-       <fx:include source="menus.fxml" fx:id="menus"/>
+       <fx:include fx:id="menus" source="menus.fxml" />
    </top>
    <left>
-       <fx:include source="gamesettings.fxml" fx:id="gameSettings"/>
+       <fx:include fx:id="gameSettings" source="gamesettings.fxml" />
    </left>
-   <center>
-       <fx:include source="game.fxml" fx:id="game"/>
-   </center>
+    <center>
+        <StackPane fx:id="gameContainer">
+            <fx:include fx:id="game" source="game.fxml" />
+        </StackPane>
+    </center>
    <right>
-       <fx:include source="ia.fxml" fx:id="ia"/>
+       <fx:include fx:id="ia" source="ia.fxml" />
    </right>
    <bottom>
-       <fx:include source="gamestate.fxml" fx:id="gameState"/>
+       <fx:include fx:id="gameState" source="gamestate.fxml" />
    </bottom>
 </BorderPane>

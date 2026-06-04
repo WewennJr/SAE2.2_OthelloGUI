@@ -38,6 +38,7 @@ public class GameController extends AppControllerBase {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        pane.setViewOrder(Double.MAX_VALUE);
         pane.toBack();
     }
 

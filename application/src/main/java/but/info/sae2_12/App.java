@@ -19,7 +19,7 @@ public class App extends Application {
     public static String mode;
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("welcome"), 640, 480);
+        scene = new Scene(loadFXML("welcome"), 900, 600);
         stage.setScene(scene);
         stage.show();
     }

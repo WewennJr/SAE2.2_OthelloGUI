@@ -15,7 +15,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class AppController implements Initializable {
     public final SimpleObjectProperty<IState> state = new SimpleObjectProperty<>(new FactoryCube().stateForWhiteLineTest());
 
     public @FXML GameController gameController;
+    public @FXML StackPane gameContainer;
     public @FXML GameSettingsController gameSettingsController;
     public @FXML MenusController menusController;
     public @FXML IAController iaController;
@@ -44,6 +47,7 @@ public class AppController implements Initializable {
         this.menusController.setController(this);
         this.iaController.setController(this);
         this.gameStateController.setController(this);
+        setupGameClip();
         this.gameSettingsController.onAppControllerSet();
 
         state.addListener((obs, oldState, newState) -> {
@@ -54,6 +58,13 @@ public class AppController implements Initializable {
 
         state.subscribe((state) -> gameStateController.refreshGameStateLabels(state));
         gameStateController.refreshGameStateLabels(state.getValue());
+    }
+
+    private void setupGameClip() {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(gameContainer.widthProperty());
+        clip.heightProperty().bind(gameContainer.heightProperty());
+        gameContainer.setClip(clip);
     }
 
     public ObjectProperty<Color> getCouleur1(){
