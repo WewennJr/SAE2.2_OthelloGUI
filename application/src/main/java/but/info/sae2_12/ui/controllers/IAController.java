@@ -4,14 +4,15 @@ import but.info.sae2_12.AI.MiniMax;
 import but.info.sae2_12.AI.MinimaxAI;
 import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.actions.Action;
+import but.info.sae2_12.model.actions.Move;
+import but.info.sae2_12.model.actions.RemoveLine;
 import but.info.sae2_12.model.state.IState;
 import but.info.sae2_12.ui.AppControllerBase;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -91,14 +92,30 @@ public class IAController extends AppControllerBase implements Initializable {
         MinimaxAI ai = new MinimaxAI(state.turn(), 3);
         Action bestMove = ai.chooseMove(state);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (bestMove == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Meilleur coup");
+            alert.setHeaderText("Aucun coup disponible");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Meilleur coup");
         alert.setHeaderText("L'IA recommande :");
-        if (bestMove != null) {
-            alert.setContentText(bestMove.toString());
-        } else {
-            alert.setContentText("Aucun coup disponible");
-        }
-        alert.showAndWait();
+        alert.setContentText(bestMove.toString());
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Jouer ce coup");
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("Annuler");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                if (bestMove instanceof Move move) {
+                    ((SimpleObjectProperty<IState>) getController().state).set(state.move(move));
+                } else if (bestMove instanceof RemoveLine removeLine) {
+                    ((SimpleObjectProperty<IState>) getController().state).set(state.removeLine(removeLine));
+                }
+            }
+        });
     }
 }
