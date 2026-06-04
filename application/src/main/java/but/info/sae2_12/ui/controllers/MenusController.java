@@ -43,7 +43,7 @@ public class MenusController extends AppControllerBase {
         alert.setTitle("À propos");
         alert.setHeaderText("Informations du groupe");
 
-        Label title = new Label("Application réalisée par");
+        Label title = new Label("Application réalisée par ");
         title.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
         Label members = new Label("" +
