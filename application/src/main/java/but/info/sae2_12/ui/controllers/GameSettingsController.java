@@ -7,6 +7,7 @@ import but.info.sae2_12.model.tokens.Token;
 import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.interaction.EditionMode;
 import but.info.sae2_12.ui.interaction.PlayMode;
+import but.info.sae2_12.ui.objects.HexSquare;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
