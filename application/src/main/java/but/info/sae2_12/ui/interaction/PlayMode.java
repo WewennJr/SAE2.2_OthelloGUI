@@ -51,7 +51,7 @@ public class PlayMode extends InteractionMode {
                     hexSquare.setIsIndicatorVisible(false);
                 }
 
-                if (!square.appControllerInstance.getState().getLines().isEmpty() && square.appControllerInstance.getGameMode() == GameMode.PLAYER_VS_PLAYER) {
+                if (!square.appControllerInstance.getState().getLines().isEmpty()) {
 
                     square.appControllerInstance.setCurrentMode(new RemoveLineMode());
                 }

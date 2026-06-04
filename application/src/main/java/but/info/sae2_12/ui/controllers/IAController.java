@@ -125,25 +125,18 @@ public class IAController extends AppControllerBase implements Initializable {
     }
 
     public void playAI(AppController controller) {
-
-        IState state = controller.getState();
-
+        IState state = controller.state.getValue();
         MinimaxAI ai = new MinimaxAI(state.turn(), 3);
-
         Action bestMove = ai.chooseMove(state);
 
-        if (bestMove == null) return;
-
-        IState newState;
-
-        if (bestMove instanceof Move move) {
-            newState = state.move(move);
-        } else if (bestMove instanceof RemoveLine removeLine) {
-            newState = state.removeLine(removeLine);
-        } else {
+        if (bestMove == null) {
             return;
         }
 
-        controller.setState(newState);
+        if (bestMove instanceof Move move) {
+            ((SimpleObjectProperty<IState>) controller.state).set(state.move(move));
+        } else if (bestMove instanceof RemoveLine removeLine) {
+            ((SimpleObjectProperty<IState>) controller.state).set(state.removeLine(removeLine));
+        }
     }
 }
