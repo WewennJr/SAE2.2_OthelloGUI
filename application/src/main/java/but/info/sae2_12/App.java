@@ -1,5 +1,6 @@
 package but.info.sae2_12;
 
+import but.info.sae2_12.ui.controllers.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,6 +30,7 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        fxmlLoader.setController(new AppController());
         return fxmlLoader.load();
     }
 

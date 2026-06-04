@@ -4,18 +4,18 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-       <fx:include source="menus.fxml"/>
+       <fx:include source="menus.fxml" fx:id="menus"/>
    </top>
    <left>
-       <fx:include source="gamesettings.fxml"/>
+       <fx:include source="gamesettings.fxml" fx:id="gameSettings"/>
    </left>
    <center>
-       <fx:include source="game.fxml" />
+       <fx:include source="game.fxml" fx:id="game"/>
    </center>
    <right>
-       <fx:include source="ia.fxml" />
+       <fx:include source="ia.fxml" fx:id="ia"/>
    </right>
    <bottom>
-       <fx:include source="gamestate.fxml" />
+       <fx:include source="gamestate.fxml" fx:id="gameState"/>
    </bottom>
 </BorderPane>
