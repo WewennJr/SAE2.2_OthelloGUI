@@ -1,4 +1,5 @@
 package but.info.sae2_12.ui.controllers;
+
 import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.factory.FactoryCube;
 import but.info.sae2_12.model.tokens.Pawn;
@@ -11,13 +12,14 @@ import but.info.sae2_12.ui.objects.HexSquare;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
-    /**
-     * Contrôleur du menu des paramètres de jeu.
-     * Gère les options d'affichage (zoom, épaisseur des bordures et affichage des coordonnées (2D, Cubique)), les couleurs des cases, le mode édition et plusieurs options de lancements de parties.
-     */
+/**
+ * Contrôleur du menu des paramètres de jeu.
+ * Gère les options d'affichage (zoom, épaisseur des bordures et affichage des coordonnées (2D, Cubique)), les couleurs des cases, le mode édition et plusieurs options de lancements de parties.
+ */
 
 public class GameSettingsController extends AppControllerBase {
     private @FXML Button nouveau;
@@ -76,13 +78,15 @@ public class GameSettingsController extends AppControllerBase {
         zoom.valueProperty().subscribe(val -> HexSquare.CELLSIZE.set(val.intValue()));
         epaisseur.valueProperty().subscribe(val -> HexSquare.EPAISSEUR.set(val.intValue()));
     }
+
     /**
      * Appelé après l'injection du contrôleur principal (AppController).
      * Met en place les liaisons des composants de l'interface, les listeners d'événements et le comportement du mode édition.
      */
 
     @FXML
-    public void onAppControllerSet(){
+    @Override
+    public void onMainControllerSetup() {
         colorPicker1.valueProperty().bindBidirectional(AppController.couleur1);
         colorPicker2.valueProperty().bindBidirectional(AppController.couleur2);
         colorPicker3.valueProperty().bindBidirectional(AppController.couleur3);
@@ -91,16 +95,11 @@ public class GameSettingsController extends AppControllerBase {
         AppController.couleur2.addListener((obs, oldVal, newVal) -> getController().gameController.initMap());
         AppController.couleur3.addListener((obs, oldVal, newVal) -> getController().gameController.initMap());
 
-        coordonnees.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            getController().hexSquares.values().forEach(
-                    hex -> hex.label.setVisible(newVal)
-            );
-        });
-
-        getController().hexSquares.values().forEach(hex -> hex.label.setVisible(true));
+        HexSquare.COORDINATES_VISIBLE.set(coordonnees.isSelected());
+        coordonnees.selectedProperty().addListener((obs, oldVal, newVal) -> HexSquare.COORDINATES_VISIBLE.set(newVal));
 
         formatChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null){
+            if (newVal != null) {
                 getController().gameController.setCoordMode((String) newVal);
             }
         });
@@ -132,5 +131,9 @@ public class GameSettingsController extends AppControllerBase {
         radioBlanc.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
         radioPion.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
         radioAnneau.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
+    }
+
+    public boolean isEditionEnable() {
+        return edition.isSelected();
     }
 }

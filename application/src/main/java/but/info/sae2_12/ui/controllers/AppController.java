@@ -64,7 +64,6 @@ public class AppController implements Initializable {
         this.iaController.setController(this);
         this.gameStateController.setController(this);
         setupGameClip();
-        this.gameSettingsController.onAppControllerSet();
 
         setGameMode(App.getGameMode());
 

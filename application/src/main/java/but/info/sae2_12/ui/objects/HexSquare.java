@@ -26,6 +26,7 @@ public class HexSquare extends Polygon {
     // vars statique pour les deux range de l'UI
     public static final SimpleIntegerProperty CELLSIZE = new SimpleIntegerProperty(35);
     public static final SimpleIntegerProperty EPAISSEUR = new SimpleIntegerProperty(2);
+    public static final SimpleBooleanProperty COORDINATES_VISIBLE = new SimpleBooleanProperty(true);
     // Demandés dans la consigne
     public AppController appControllerInstance;
     SimpleBooleanProperty isIndicatorVisible = new SimpleBooleanProperty(false);
@@ -40,9 +41,10 @@ public class HexSquare extends Polygon {
 
     /**
      * Permet de créer un élément hexagone
+     *
      * @param appController controller avec state valide
-     * @param coordinate Position de l'hexagone acutel
-     * @param color Couleur de celui-ci
+     * @param coordinate    Position de l'hexagone acutel
+     * @param color         Couleur de celui-ci
      */
     public HexSquare(AppController appController, Coordinate coordinate, Color color) {
         this.coordinate = coordinate;
@@ -67,6 +69,7 @@ public class HexSquare extends Polygon {
 
     /**
      * Méthode appellée pour redessiner l'hexagone quand il est actualisé
+     *
      * @param size
      */
     private void updateLayoutForSize(int size) {
@@ -104,9 +107,11 @@ public class HexSquare extends Polygon {
      */
     private void buildLabel() {
         this.label = new Label(coordinate.to2DCoordinate().x() + "," + coordinate.to2DCoordinate().y());
+        this.label.visibleProperty().bind(COORDINATES_VISIBLE);
         this.label.layoutXProperty().bind(this.layoutXProperty().subtract(this.label.widthProperty().divide(2)));
         this.label.layoutYProperty().bind(this.layoutYProperty().subtract(this.label.heightProperty().divide(2)));
         this.appControllerInstance.gameController.pane.getChildren().add(this.label);
+
 
         this.label.toFront();
         this.label.setTextAlignment(TextAlignment.CENTER);
@@ -114,6 +119,7 @@ public class HexSquare extends Polygon {
 
     /**
      * Permet de dessiner l'indicateur visuel (le rond orange)
+     *
      * @param size taille absolu en px
      */
     private void buildVisualIndicator(int size) {
@@ -134,6 +140,7 @@ public class HexSquare extends Polygon {
 
     /**
      * Parei que buildVisualIndicator mais pour dessiner l'anneau ou le pion blanc ou noir
+     *
      * @param size taille en px
      */
     private void buildShape(int size) {
@@ -167,6 +174,7 @@ public class HexSquare extends Polygon {
     /**
      * Méthode interne pour bind un event à des noeuds pour permettre aux éléments sur l'hexagone de quand même
      * déclancher les events de click, hover, etc... et pas juste le polygone de base
+     *
      * @param n
      */
     private void bindEventsToNode(Node... n) {
@@ -179,6 +187,7 @@ public class HexSquare extends Polygon {
 
     /**
      * Rédéfinir à la main l'affichage de l'indicateur
+     *
      * @param isIndicatorVisible
      */
     public void setIsIndicatorVisible(boolean isIndicatorVisible) {

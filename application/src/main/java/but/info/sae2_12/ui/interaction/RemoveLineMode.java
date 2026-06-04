@@ -50,7 +50,7 @@ public class RemoveLineMode extends InteractionMode {
                 for (Coordinate coordinate : relatedLine) {
                     colorMap.put(coordinate, square.appControllerInstance.hexSquares.get(coordinate).getFill());
                     square.appControllerInstance.hexSquares.get(coordinate).setFill(Color.RED);
-                    currentGameState.rings().get(currentGameState.turn()).forEach(ring -> square.appControllerInstance.hexSquares.get(ring).setFill(Color.LIGHTBLUE));
+                    currentGameState.rings().get(currentGameState.turn().other()).forEach(ring -> square.appControllerInstance.hexSquares.get(ring).setFill(Color.LIGHTBLUE));
                 }
             }
         } else {
@@ -82,7 +82,7 @@ public class RemoveLineMode extends InteractionMode {
         IState currentGameState = square.appControllerInstance.getState();
 
         if (currentLineSelection != null) {
-            if (currentGameState.board().get(square.coordinate) instanceof Ring ring && ring.getTeam() == currentGameState.turn()) {
+            if (currentGameState.board().get(square.coordinate) instanceof Ring ring && ring.getTeam() == currentGameState.turn().other()) {
                 colorMap.put(square.coordinate, square.getFill());
                 square.setFill(Color.ROYALBLUE);
             }
