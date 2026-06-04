@@ -1,15 +1,15 @@
 package but.info.sae2_12.ui.controllers;
+import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.factory.FactoryCube;
-import but.info.sae2_12.model.factory.FactoryDoubled;
+import but.info.sae2_12.model.tokens.Pawn;
+import but.info.sae2_12.model.tokens.Ring;
+import but.info.sae2_12.model.tokens.Token;
 import but.info.sae2_12.ui.AppControllerBase;
-import but.info.sae2_12.ui.objects.HexSquare;
-import javafx.beans.property.SimpleObjectProperty;
+import but.info.sae2_12.ui.interaction.EditionMode;
+import but.info.sae2_12.ui.interaction.PlayMode;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -17,9 +17,13 @@ public class GameSettingsController extends AppControllerBase {
     private @FXML Button nouveau;
     private @FXML Button testBlanc;
     private @FXML Button testNoir;
-    private @FXML Button testDouble;
+    private @FXML Button testState;
     private @FXML Slider epaisseur;
     private @FXML Slider zoom;
+    private @FXML RadioButton radioNoir;
+    private @FXML RadioButton radioBlanc;
+    private @FXML RadioButton radioPion;
+    private @FXML RadioButton radioAnneau;
     private @FXML CheckBox coordonnees;
     private @FXML CheckBox edition;
     private @FXML VBox sousZone;
@@ -44,23 +48,19 @@ public class GameSettingsController extends AppControllerBase {
         });
 
         nouveau.setOnAction(event -> {
-            getController().state.set(new FactoryDoubled().randomGame());
             getController().state.set(new FactoryCube().randomGame());
         });
 
         testNoir.setOnAction(event -> {
-            getController().state.set(new FactoryDoubled().stateForBlackLineTest());
             getController().state.set(new FactoryCube().stateForBlackLineTest());
         });
 
         testBlanc.setOnAction(event -> {
-            getController().state.set(new FactoryDoubled().stateForWhiteLineTest());
             getController().state.set(new FactoryCube().stateForWhiteLineTest());
         });
 
-        testDouble.setOnAction(event -> {
-            getController().state.set(new FactoryDoubled().doubleLineStateTest());
-            getController().state.set(new FactoryCube().doubleLineStateTest());
+        testState.setOnAction(event -> {
+            getController().state.set(new FactoryCube().testState());
         });
 
         zoom.valueProperty().subscribe(val -> HexSquare.CELLSIZE.set(val.intValue()));
@@ -83,12 +83,40 @@ public class GameSettingsController extends AppControllerBase {
             );
         });
 
-        getController().hexSquares.values().forEach(hex -> hex.label.setVisible(false));
+        getController().hexSquares.values().forEach(hex -> hex.label.setVisible(true));
 
         formatChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null){
                 getController().gameController.setCoordMode((String) newVal);
             }
         });
+
+        Runnable updateEditMode = () -> {
+            if (edition.isSelected()) {
+                Team team;
+                if (radioNoir.isSelected()) {
+                    team = Team.BLACK;
+                } else {
+                    team = Team.WHITE;
+                }
+                Token token;
+                if (radioPion.isSelected()) {
+                    token = new Pawn(team);
+                } else {
+                    token = new Ring(team);
+                }
+                getController().setCurrentMode(new EditionMode(token));
+            }
+        };
+
+        edition.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) updateEditMode.run();
+            else getController().setCurrentMode(new PlayMode());
+        });
+
+        radioNoir.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
+        radioBlanc.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
+        radioPion.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
+        radioAnneau.selectedProperty().addListener((obs, o, n) -> updateEditMode.run());
     }
 }
