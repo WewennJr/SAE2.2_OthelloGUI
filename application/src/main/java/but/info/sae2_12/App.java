@@ -1,5 +1,6 @@
 package but.info.sae2_12;
 
+import but.info.sae2_12.model.GameMode;
 import but.info.sae2_12.ui.controllers.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,17 @@ public class App extends Application {
 
     private static Scene scene;
     public static String mode;
+
+    private static GameMode gameMode;
+
+    public static void setGameMode(GameMode mode) {
+        gameMode = mode;
+    }
+
+    public static GameMode getGameMode() {
+        return gameMode;
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("welcome"), 640, 480);
