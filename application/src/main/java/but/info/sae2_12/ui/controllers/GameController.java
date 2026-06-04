@@ -44,7 +44,6 @@ public class GameController extends AppControllerBase {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
     }
 
 

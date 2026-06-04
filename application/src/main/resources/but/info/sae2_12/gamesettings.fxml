@@ -12,7 +12,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="619.0" prefWidth="128.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="but.info.sae2_12.ui.controllers.GameSettingsController">
+<VBox spacing="10.0" prefWidth="190.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="but.info.sae2_12.ui.controllers.GameSettingsController"
+      style="-fx-padding: 12; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-background-color: #fafafa;"
+      VBox.vgrow="ALWAYS" prefHeight="Infinity">
    <children>
       <Button fx:id="nouveau" mnemonicParsing="false" prefHeight="30.0" prefWidth="179.0" text="Nouvelle partie">
          <VBox.margin>
@@ -29,7 +33,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
       </Button>
-      <Button fx:id="testDouble" mnemonicParsing="false" prefHeight="30.0" prefWidth="183.0" text="Test Double">
+      <Button fx:id="testState" mnemonicParsing="false" prefHeight="30.0" prefWidth="183.0" text="Test">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
@@ -41,7 +45,7 @@
       </CheckBox>
       <VBox fx:id="sousZone" prefHeight="118.0" prefWidth="128.0">
          <children>
-            <RadioButton mnemonicParsing="false" text="Noir">
+            <RadioButton fx:id="radioNoir" mnemonicParsing="false" text="Noir">
                <toggleGroup>
                   <ToggleGroup fx:id="ChoixCouleur" />
                </toggleGroup>
@@ -49,12 +53,12 @@
                   <Insets left="15.0" />
                </VBox.margin>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Blanc" toggleGroup="$ChoixCouleur">
+            <RadioButton fx:id="radioBlanc" mnemonicParsing="false" text="Blanc" toggleGroup="$ChoixCouleur">
                <VBox.margin>
                   <Insets left="15.0" />
                </VBox.margin>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Pions">
+            <RadioButton fx:id="radioPion" mnemonicParsing="false" text="Pions">
                <toggleGroup>
                   <ToggleGroup fx:id="ChoixToken" />
                </toggleGroup>
@@ -62,14 +66,14 @@
                   <Insets left="15.0" />
                </VBox.margin>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Anneaux" toggleGroup="$ChoixToken">
+            <RadioButton fx:id="radioAnneau" mnemonicParsing="false" text="Anneaux" toggleGroup="$ChoixToken">
                <VBox.margin>
                   <Insets left="15.0" />
                </VBox.margin>
             </RadioButton>
          </children>
       </VBox>
-      <ColorPicker fx:id="colorPicker1">
+      <ColorPicker fx:id="colorPicker1" >
          <VBox.margin>
             <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
@@ -102,7 +106,7 @@
             <Color red="0.8274509906768799" green="0.8274509906768799" blue="0.8274509906768799" />
          </value>
       </ColorPicker>
-      <CheckBox fx:id="coordonnees" mnemonicParsing="false" text="Coordonées">
+      <CheckBox fx:id="coordonnees" mnemonicParsing="false" text="Coordonées" selected="true">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>

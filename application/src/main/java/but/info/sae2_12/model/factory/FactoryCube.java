@@ -132,7 +132,7 @@ public class FactoryCube extends AbstractFactory {
                 new CoordinateCube(2, -3, 1),
                 new CoordinateCube(3, -1, -2)
         )) {
-            board.put(c, new Pawn(Team.BLACK));
+            board.put(c, new Pawn(Team.WHITE));
         }
         return new State(board, Team.WHITE, List.of());
     }
