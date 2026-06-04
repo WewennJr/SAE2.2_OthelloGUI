@@ -5,6 +5,7 @@ import but.info.sae2_12.AI.MinimaxAI;
 import but.info.sae2_12.model.Team;
 import but.info.sae2_12.model.state.IState;
 import but.info.sae2_12.ui.AppControllerBase;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressBar;
@@ -31,30 +32,48 @@ public class IAController extends AppControllerBase implements Initializable {
         ringRemovedWeightField.setText("1000.0");
         pawnWeightField.setText("10.0");
         nearLineWeightField.setText("50.0");
+
+        Platform.runLater(() -> winScoreField.getScene().getRoot().requestFocus());
     }
 
     @FXML
     public void onWinScoreChanged() {
-        try { minimaxAI.setWinScore(Double.parseDouble(winScoreField.getText())); }
-        catch (NumberFormatException ignored) {}
+        try {
+            minimaxAI.setWinScore(Double.parseDouble(winScoreField.getText()));
+        } catch (NumberFormatException ignored) {
+            winScoreField.setText("100000.0");
+        }
+        winScoreField.getScene().getRoot().requestFocus();
     }
 
     @FXML
     public void onRingRemovedWeightChanged() {
-        try { minimaxAI.setRingRemovedWeight(Double.parseDouble(ringRemovedWeightField.getText())); }
-        catch (NumberFormatException ignored) {}
+        try {
+            minimaxAI.setRingRemovedWeight(Double.parseDouble(ringRemovedWeightField.getText()));
+        } catch (NumberFormatException ignored) {
+            ringRemovedWeightField.setText("1000.0");
+        }
+        ringRemovedWeightField.getScene().getRoot().requestFocus();
     }
 
     @FXML
     public void onPawnWeightChanged() {
-        try { minimaxAI.setPawnWeight(Double.parseDouble(pawnWeightField.getText())); }
-        catch (NumberFormatException ignored) {}
+        try {
+            minimaxAI.setPawnWeight(Double.parseDouble(pawnWeightField.getText()));
+        } catch (NumberFormatException ignored) {
+            pawnWeightField.setText("10.0");
+        }
+        pawnWeightField.getScene().getRoot().requestFocus();
     }
 
     @FXML
     public void onNearLineWeightChanged() {
-        try { minimaxAI.setNearLineWeight(Double.parseDouble(nearLineWeightField.getText())); }
-        catch (NumberFormatException ignored) {}
+        try {
+            minimaxAI.setNearLineWeight(Double.parseDouble(nearLineWeightField.getText()));
+        } catch (NumberFormatException ignored) {
+            nearLineWeightField.setText("50.0");
+        }
+        nearLineWeightField.getScene().getRoot().requestFocus();
     }
 
     public void updateEvaluationBar(IState state) {
