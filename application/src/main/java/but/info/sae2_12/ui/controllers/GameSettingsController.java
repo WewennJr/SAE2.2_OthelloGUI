@@ -14,6 +14,11 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+    /**
+     * Contrôleur du menu des paramètres de jeu.
+     * Gère les options d'affichage (zoom, épaisseur des bordures et affichage des coordonnées (2D, Cubique)), les couleurs des cases, le mode édition et plusieurs options de lancements de parties.
+     */
+
 public class GameSettingsController extends AppControllerBase {
     private @FXML Button nouveau;
     private @FXML Button testBlanc;
@@ -33,6 +38,10 @@ public class GameSettingsController extends AppControllerBase {
     private @FXML ColorPicker colorPicker3;
     private @FXML ListView formatChoice;
 
+    /**
+     * Initialise les composants de l'interface :
+     * les boutons de partie, le mode édition, le zoom, l'épaisseur (de 1 à 5) et le format des coordonnées (2D, Cubique).
+     */
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -67,6 +76,10 @@ public class GameSettingsController extends AppControllerBase {
         zoom.valueProperty().subscribe(val -> HexSquare.CELLSIZE.set(val.intValue()));
         epaisseur.valueProperty().subscribe(val -> HexSquare.EPAISSEUR.set(val.intValue()));
     }
+    /**
+     * Appelé après l'injection du contrôleur principal (AppController).
+     * Met en place les liaisons des composants de l'interface, les listeners d'événements et le comportement du mode édition.
+     */
 
     @FXML
     public void onAppControllerSet(){
