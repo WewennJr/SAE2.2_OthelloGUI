@@ -96,4 +96,17 @@ public class MinimaxAI implements AI {
 
     /** @return L'équipe de l'IA. */
     public Team getAiTeam() { return aiTeam; }
+
+    public void setWinScore(double value) {
+        miniMax.setWinScore(value);
+    }
+    public void setRingRemovedWeight(double value) {
+        miniMax.setRingRemovedWeight(value);
+    }
+    public void setPawnWeight(double value) {
+        miniMax.setPawnWeight(value);
+    }
+    public void setNearLineWeight(double value) {
+        miniMax.setNearLineWeight(value);
+    }
 }

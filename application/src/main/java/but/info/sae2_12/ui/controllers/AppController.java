@@ -46,6 +46,12 @@ public class AppController implements Initializable {
         this.menusController.setController(this);
         this.iaController.setController(this);
         this.gameStateController.setController(this);
+
+        ((SimpleObjectProperty<IState>) state).addListener((obs, oldState, newState) -> {
+            if (newState != null) {
+                iaController.updateEvaluationBar(newState);
+            }
+        });
     }
 
     public ObjectProperty<Color> getCouleur1(){

@@ -27,4 +27,9 @@ public class Move extends Action {
     public void setFrom(Coordinate from) {
         this.from = from;
     }
+
+    @Override
+    public String toString() {
+        return "Déplacer l'anneau de " + from + " vers " + to;
+    }
 }
