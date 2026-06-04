@@ -46,6 +46,7 @@ public class AppController implements Initializable {
         this.menusController.setController(this);
         this.iaController.setController(this);
         this.gameStateController.setController(this);
+        this.gameSettingsController.onAppControllerSet();
     }
 
     public ObjectProperty<Color> getCouleur1(){
@@ -57,7 +58,6 @@ public class AppController implements Initializable {
     public ObjectProperty<Color> getCouleur3(){
         return couleur3;
     }
-}
 
     public InteractionMode getCurrentMode() {
         return currentMode.getValue();

@@ -23,4 +23,8 @@ public abstract class AppControllerBase implements Initializable {
     }
 
     public abstract void initialize(URL url, ResourceBundle rb);
+
+    public void onAppControllerSet(){
+
+    }
 }

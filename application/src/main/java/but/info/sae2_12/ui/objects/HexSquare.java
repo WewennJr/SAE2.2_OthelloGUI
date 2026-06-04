@@ -5,17 +5,13 @@ import but.info.sae2_12.model.tokens.Ring;
 import but.info.sae2_12.model.tokens.Token;
 import but.info.sae2_12.ui.controllers.AppController;
 import coordinates.Coordinate;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.TextAlignment;
 
@@ -106,5 +102,9 @@ public class HexSquare extends Polygon {
 
     public void setIsIndicatorVisible(boolean isIndicatorVisible) {
         this.isIndicatorVisible.set(isIndicatorVisible);
+    }
+
+    public void setVisibleAndChilds(Boolean newVal) {
+
     }
 }

@@ -14,22 +14,22 @@
 
 <VBox prefHeight="619.0" prefWidth="128.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="but.info.sae2_12.ui.controllers.GameSettingsController">
    <children>
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="179.0" text="Nouvelle partie">
+      <Button fx:id="nouveau" mnemonicParsing="false" prefHeight="30.0" prefWidth="179.0" text="Nouvelle partie">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="176.0" text="Button">
+      <Button fx:id="testNoir" mnemonicParsing="false" prefHeight="30.0" prefWidth="176.0" text="Test Noir">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="177.0" text="Button">
+      <Button fx:id="testBlanc" mnemonicParsing="false" prefHeight="30.0" prefWidth="177.0" text="Test Blanc">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="183.0" text="Button">
+      <Button fx:id="testDouble" mnemonicParsing="false" prefHeight="30.0" prefWidth="183.0" text="Test Double">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
@@ -107,7 +107,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
       </CheckBox>
-      <ListView prefHeight="59.0" prefWidth="107.0">
+      <ListView fx:id="formatChoice" prefHeight="59.0" prefWidth="107.0">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>

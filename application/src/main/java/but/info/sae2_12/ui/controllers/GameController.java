@@ -3,12 +3,15 @@ package but.info.sae2_12.ui.controllers;
 import but.info.sae2_12.ui.AppControllerBase;
 import but.info.sae2_12.ui.objects.HexSquare;
 import coordinates.Coordinate;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 public class GameController extends AppControllerBase {
@@ -29,12 +32,18 @@ public class GameController extends AppControllerBase {
         this.getController().state.subscribe((state) -> initMap());
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
     public void initMap() {
+
         this.getController().hexSquares.clear();
         this.pane.getChildren().clear();
 
         this.getController().getState().board().forEach((coord, tok) -> {
-            HexSquare hexSquare = new HexSquare(this.getController(), coord, computeColor(coord.to2DCoordinate().x(), coord.to2DCoordinate().y()));
+            HexSquare hexSquare = new HexSquare(this.getController(), coord, computeColor(coord.to2DCoordinate().x(), coord.to2DCoordinate().y()).get());
             this.getController().hexSquares.put(coord, hexSquare);
         });
 
@@ -43,7 +52,6 @@ public class GameController extends AppControllerBase {
                 this.getController().hexSquares.get(coordinate).setFill(Color.LIGHTGREEN);
             }
         }
-
     }
 
     private void setupNavigation() {
@@ -68,12 +76,12 @@ public class GameController extends AppControllerBase {
         });
     }
 
-    public Color computeColor(int x, int y) {
+    public ObjectProperty<Color> computeColor(int x, int y) {
         return switch (x % 3) {
-            case 0 -> Color.LIGHTGRAY;
-            case 1 -> Color.GRAY;
-            case 2 -> Color.DARKGRAY;
-            default -> Color.BLACK;
+            case 0 -> AppController.couleur1;
+            case 1 -> AppController.couleur2;
+            case 2 -> AppController.couleur3;
+            default -> AppController.couleur1;
         };
     }
 }

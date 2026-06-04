@@ -122,7 +122,7 @@ public class FactoryDoubled extends AbstractFactory {
                 new CoordinateDoubled(6, 0),
                 new CoordinateDoubled(6, 6)
         )) {
-            board.put(c, new Pawn(Team.BLACK));
+            board.put(c, new Pawn(Team.WHITE));
         }
         return new State(board, Team.WHITE, List.of());
     }
