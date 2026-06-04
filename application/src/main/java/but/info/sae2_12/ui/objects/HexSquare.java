@@ -19,6 +19,7 @@ import javafx.util.Subscription;
 
 public class HexSquare extends Polygon {
     public static final SimpleIntegerProperty CELLSIZE = new SimpleIntegerProperty(35);
+    public static final SimpleIntegerProperty EPAISSEUR = new SimpleIntegerProperty(2);
     public AppController appControllerInstance;
     SimpleBooleanProperty isIndicatorVisible = new SimpleBooleanProperty(false);
     Color color;
@@ -36,7 +37,7 @@ public class HexSquare extends Polygon {
 
         setFill(color);
         setStroke(Color.BLACK);
-        setStrokeWidth(0.5);
+        EPAISSEUR.addListener((obs, oldVal, newVal) -> setStrokeWidth(newVal.doubleValue()));
         setStrokeType(StrokeType.CENTERED);
 
         this.appControllerInstance.gameController.pane.getChildren().add(this);

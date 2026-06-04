@@ -64,6 +64,7 @@ public class GameSettingsController extends AppControllerBase {
         });
 
         zoom.valueProperty().subscribe(val -> HexSquare.CELLSIZE.set(val.intValue()));
+        epaisseur.valueProperty().subscribe(val -> HexSquare.EPAISSEUR.set(val.intValue()));
     }
 
     @FXML
